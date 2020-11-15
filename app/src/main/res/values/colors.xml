@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    <color name="colorPrimary">#6200EE</color>-->
+<!--    <color name="colorPrimaryDark">#3700B3</color>-->
+<!--    <color name="colorAccent">#03DAC5</color>-->
+
+    <color name="blueprimary">#2F80ED</color>
+    <color name="skyblue">#E5F0FF</color>
+    <color name="darkblue">#374B7E</color>
+
+
+    <color name="lightgrey">#E5E5E5</color>
+    <color name="black">#000000</color>
+    <color name="light_black">#323F4B</color>
+//grey800
+    <color name="white">#FFFFFF</color>
+
+
+    <color name="empty">#ffc1c1</color>
+    <color name="progress">#8c9eff</color>
+    <color name="progress_click">#bbdefb</color>
+    <color name="pin_background">#2c2c65</color>
+    <color name="pin_text">#8c8c8c</color>
+    <color name="bar_title_color">#000000</color>
+    <color name="bar_title_txt_selected_color">#eaa</color>
+    <color name="progress_disable">@android:color/darker_gray</color>
+</resources>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:padding="20dp"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Game Details"
+        android:fontFamily="@font/mulishmedium"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TITLE"
+        android:fontFamily="@font/mulishmedium"
+        android:textColor="@color/black"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/gamedetailtitle"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/spinner_drawable"
+        android:hint="Game title"
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        android:fontFamily="@font/mulishbold"
+        android:textSize="16sp"
+        android:paddingLeft="15dp" />
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DESCRIPTION"
+        android:fontFamily="@font/mulishmedium"
+        android:textColor="@color/black"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/gamedetaildetails"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/spinner_drawable"
+        android:hint="Details about the game"
+        android:textSize="16sp"
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        android:fontFamily="@font/mulishbold"
+        android:paddingLeft="15dp" />
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Game Type"
+        android:fontFamily="@font/mulishmedium"
+        android:textColor="@color/black"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/gamedetailtype"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/spinner_drawable"
+        android:hint="Game Type"
+        android:textSize="16sp"
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        android:fontFamily="@font/mulishbold"
+        android:paddingLeft="15dp" />
+
+
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CONTENT URL"
+        android:textColor="@color/black"
+        android:fontFamily="@font/mulishmedium"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/gamedetailcontenturl"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/spinner_drawable"
+        android:textColor="@color/black"
+        android:fontFamily="@font/mulishbold"
+        android:gravity="center_vertical"
+        android:hint="URL for content or live data (optional)"
+        android:textSize="16sp"
+        android:paddingLeft="15dp" />
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="START DATE"
+        android:fontFamily="@font/mulishmedium"
+        android:textColor="@color/black"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/gamedetailstartdate"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/spinner_drawable"
+        android:hint="Scheduled Start Date/Time"
+        android:textColor="@color/black"
+        android:fontFamily="@font/mulishbold"
+        android:textSize="16sp"
+        android:drawableLeft="@drawable/dateicon"
+        android:drawablePadding="10dp"
+        android:drawableTint="@color/light_black"
+        android:paddingLeft="15dp"
+        android:paddingStart="15dp"/>
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="END DATE"
+        android:fontFamily="@font/mulishmedium"
+        android:textColor="@color/black"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/gamedetailenddate"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/spinner_drawable"
+        android:hint="Scheduled End Date/Time"
+        android:textColor="@color/black"
+        android:fontFamily="@font/mulishbold"
+        android:textSize="16sp"
+        android:drawableLeft="@drawable/dateicon"
+        android:drawablePadding="10dp"
+        android:drawableTint="@color/light_black"
+        android:paddingLeft="15dp"
+        android:paddingStart="15dp" />
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Game Tags"
+        android:fontFamily="@font/mulishmedium"
+        android:textColor="@color/black"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/gamedetailtags"
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/spinner_drawable"
+        android:hint="Game Tags"
+        android:textSize="16sp"
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        android:fontFamily="@font/mulishbold"
+        android:paddingLeft="15dp" />
+
+</LinearLayout>

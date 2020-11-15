@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="290dp"
+        android:layout_margin="12dp"
+        app:cardCornerRadius="20dp">
+
+        <LinearLayout
+            android:id="@+id/gamecard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="@drawable/gamecardbackground"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/gameimage"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:scaleType="fitXY"
+                android:background="@drawable/gameimagebackground"
+                android:src="@drawable/dummyimage" />
+            <TextView
+                android:id="@+id/gamecategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="6dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/mulishbold"
+                android:textSize="12sp"
+                android:text="@string/rank"/>
+
+            <TextView
+                android:id="@+id/gametittle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:fontFamily="@font/mulishbold"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:paddingTop="6dp"
+                android:text="@string/rank"/>
+            <TextView
+                android:id="@+id/gamedescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="6dp"
+                android:maxLines="2"
+                android:fontFamily="@font/mulishmedium"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:ellipsize="end"
+                android:text="@string/rank"/>
+
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

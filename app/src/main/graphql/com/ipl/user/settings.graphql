@@ -1,0 +1,44 @@
+query GetMatchDetails($id: ID!) {
+   getMatchDetails(id: $id){
+              id
+              team1
+              team2
+              startDate
+              mState
+              firstInnings {
+                  battingTeam
+                  bowlingTeam
+                  runs
+                  overs
+                  wickets
+                  mState
+              }
+              secondInnings {
+                  battingTeam
+                  bowlingTeam
+                  runs
+                  overs
+                  wickets
+                  mState
+              }
+    }
+ }
+
+subscription QuestionCreatedMain {
+  QuestionCreated {
+     question
+     answers
+  }
+}
+
+subscription QuestionStoppedMain {
+  QuestionStopped {
+    matchId
+    questionId
+    ans
+  }
+}
+
+
+
+

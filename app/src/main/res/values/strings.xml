@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Figma</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+
+
+    <string-array name="countries">
+
+        <item>India</item>
+        <item>USA</item>
+        <item>Srilanka</item>
+        <item>Pakistan</item>
+        <item>China</item>
+        <item>Nepal</item>
+        <item>Iran</item>
+        <item>Australia</item>
+        <item>Russia</item>
+        <item>Italy</item>
+    </string-array>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="facebook_app_id">1885701564930735</string>
+    <string name="fb_login_protocol_scheme">fb1885701564930735</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pointseared">%s Points Earned</string>
+    <string name="playername">CSK: 85/2 (12.1)</string>
+    <string name="oppositeplayer">vs MI</string>
+    <string name="live_stats">Live Stats</string>
+    <string name="points">POINTS</string>
+    <string name="rank">RANK</string>
+    <string name="live">LIVE</string>
+    <string name="time_left_to_answer">time left to answer</string>
+    <string name="time_left_questions">10/20</string>
+    <string name="guess_the_outcome_of_the_next_ball">Guess the outcome of the next ball</string>
+    <string name="analysing_n_results">analysing \n results...</string>
+    <string name="preparing_next_n_question">Preparing next \n question...</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="enter_your_phone_number_to_sign_up">Enter your email to sign in</string>
+    <string name="country">Country</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="your_phone_number">Your Phone Number</string>
+    <string name="continue_text">CONTINUE</string>
+    <string name="or">or</string>
+    <string name="continue_with_facebook">CONTINUE WITH FACEBOOK</string>
+    <string name="continue_with_google">CONTINUE WITH GOOGLE</string>
+    <string name="welcome">Welcome</string>
+    <string name="enter_the_4_digit_code_just_sent_to">Enter the 6-digit code just sent to</string>
+    <string name="didn_t_receive_the_code">Didn’t receive the code?</string>
+    <string name="resend"> Resend</string>
+    <string name="over_view">Over view</string>
+    <string name="games">GAMES</string>
+    <string name="recent_stats">Recent Stats</string>
+    <string name="see_more">See more</string>
+    <string name="total">TOTAL</string>
+    <string name="recommended">Recommended</string>
+    <string name="sort_by">Sort by</string>
+
+
+</resources>
