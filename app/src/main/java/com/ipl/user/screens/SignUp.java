@@ -192,6 +192,7 @@ boolean isPasswordVisible;
             }
             @Override
             public void onFailure(Exception e) {
+                signupprogbar.setVisibility(View.GONE);
 
                 if (e instanceof AmazonServiceException ) {
 
