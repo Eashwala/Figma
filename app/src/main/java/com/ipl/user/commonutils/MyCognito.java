@@ -94,6 +94,7 @@ public class MyCognito {
 //                userPool.getCurrentUser().globalSignOutInBackground(handler);
 //            }
 //        }
+
 //        CognitoUser cognitoUser =  userPool.getUser(userId);
 //        if (cognitoUser != null) {
 //            cognitoUser.signOut();
