@@ -19,9 +19,9 @@ import java.util.Map;
 public class MyCognito {
 
     // ############################################################# Information about Cognito Pool
-    private String poolID = "us-east-1_taUcTKGCx";
-    private String clientID = "735safrggvb6kcte384vl6f0gl";
-    private String clientSecret = "1r6nsjapqj541uat5li9rnffghh4heq0g21kbuabstvl7jp8le3o";
+    private String poolID = "";
+    private String clientID = "";
+    private String clientSecret = "";
     private Regions awsRegion = Regions.US_EAST_1;         // Place your Region
     // ############################################################# End of Information about Cognito Pool
     private CognitoUserPool userPool;

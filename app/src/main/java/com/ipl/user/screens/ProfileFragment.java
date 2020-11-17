@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,13 +122,18 @@ public class ProfileFragment extends Fragment {
 
 //                    if (userRanking.getRankings()!= null && userRanking.getRankings().size()>0 ){
 //                        for(int i=0;i<userRanking.getRankings().size();i++){
-//                            rankingList = userRanking.getRankings().get(i);
+//                            rankingList.add( userRanking.getRankings().get(i));
 //                        }
 //                    }
+                    Log.e("TAG", "onResponse: "+userRanking.getUserRank() );
+                    Log.e("TAG", "onResponse: "+rankingList );
 
                     // selectgame.setText(rankingList.get(0).getPoints());
-                    prof_rank_score.setText(rank);
-                    //  points_score.setText(rankingList.get(0).getPoints() );
+                    if(rank!=null && !rank.isEmpty()){
+                        prof_rank_score.setText(rank);
+                    }
+
+                //    prof_points_score.setText(rankingList.get(0).getPoints() );
                 }
 
             }
