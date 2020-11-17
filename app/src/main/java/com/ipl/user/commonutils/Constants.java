@@ -2,16 +2,6 @@ package com.ipl.user.commonutils;
 
 public class Constants {
 
-    public static final String BASE_URL = "https://0len6jubzk.execute-api.us-east-1.amazonaws.com/Prod/";
-            //"https://zvcg1rgvk7.execute-api.us-east-1.amazonaws.com/Prod/";
-
-    public static final String WEBSOCKET_BASE_URL ="wss://c2orqz00xh.execute-api.us-east-1.amazonaws.com/Prod/";
-           //wss://c2orqz00xh.execute-api.us-east-1.amazonaws.com/Prod?gameId=f73a8350-150c-11eb-aaf0-c1f3244830cf
-
-    //wss://ho9zc85taa.execute-api.us-east-1.amazonaws.com/Prod/
-
-    public static final String domainName = "c2orqz00xh.execute-api.us-east-1.amazonaws.com";
-    public static final String stage = "Prod";
 
     public static final String UNKNOWN = "UNKNOWN";
     public static final String ADD_COMMENT = "Please add comment";
