@@ -173,6 +173,7 @@ boolean isPasswordVisible;
             public void onSuccess(CognitoUserSession userSession, CognitoDevice newDevice) {
                 cognitoUserSession = userSession;
                 sharedPreferenceManager.setUserLoggedIn(true);
+                sharedPreferenceManager.setUserId(userSession.getUsername());
                 signupprogbar.setVisibility(View.GONE);
                 Intent ii = new Intent(SignUp.this, MainActivity.class);
                 ii.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

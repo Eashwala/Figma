@@ -34,6 +34,6 @@ public interface APIInterface {
     Call<UserRanking> getUserRanking(@Query("userId")  String userId, @Query("limit")  String limit, @Query("gameId")  String gameId);
 
     @GET("userranking")
-    Call<UserRanking> getProfileRanking(@Query("userId")  String userId, @Query("limit")  String limit);
+    Call<UserRanking> getProfileRanking(@Query("userId")  String userId, @Query("limit")  String limit, @Query("gameId")  String gameId);
 
 }

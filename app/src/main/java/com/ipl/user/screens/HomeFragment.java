@@ -57,6 +57,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
     MyCountDownTimer myCountDownTimer;
     String timeout;
     int second;
+    String predictivetimetaken;
 
     APIInterface service;
     private static final String TAG = "home";
@@ -163,7 +164,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
                     player1_score.setText(sharedPreferenceManager.getGameTittle());
                     player2.setText(sharedPreferenceManager.getGamePlayer2());
                     Log.e(TAG, "onResume: socketopeneddd" );
-                    getUserRanking();
+//                    getUserRanking();
                 }
             }
 
@@ -178,7 +179,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
 
     private void getUserRanking() {
 
-        Call<UserRanking> call = service.getUserRanking("u2","1",sharedPreferenceManager.getGameId());
+        Call<UserRanking> call = service.getUserRanking(sharedPreferenceManager.getUserId(),"100",sharedPreferenceManager.getGameId());
         call.enqueue(new Callback<UserRanking>() {
             @Override
             public void onResponse(Call<UserRanking> call, retrofit2.Response<UserRanking> response) {
@@ -190,15 +191,20 @@ public class HomeFragment extends Fragment implements OnItemClick {
                     String rank = userRanking.getUserRank();
                     List<Ranking> rankingList = new ArrayList<>();
 
-//                    if (userRanking.getRankings()!= null && userRanking.getRankings().size()>0 ){
-//                        for(int i=0;i<userRanking.getRankings().size();i++){
-//                            rankingList = userRanking.getRankings().get(i);
-//                        }
-//                    }
+                    if (userRanking.getRankings()!= null && userRanking.getRankings().size()>0 ){
+                        for(int i=0;i<userRanking.getRankings().size();i++){
+                            rankingList = userRanking.getRankings();
+
+                       if(rankingList.get(i).getId().equalsIgnoreCase(sharedPreferenceManager.getUserId())){
+                           points = String.valueOf(rankingList.get(i).getPoints());
+
+                       }
+                        }
+                    }
 
                     // selectgame.setText(rankingList.get(0).getPoints());
                     rank_score.setText(rank);
-                    //  points_score.setText(rankingList.get(0).getPoints() );
+                    points_score.setText(points);
 
                 }else{
 
@@ -282,11 +288,16 @@ public class HomeFragment extends Fragment implements OnItemClick {
                 }else if(msgType.equalsIgnoreCase("closeQuestion")){
                     question_name.setText("Sorry, question closed!");
                     String answerfromserver =event.getMsgContent().getAnswer();
+                    String queidd =event.getMsgContent().getId();
                     answersAdapter.updateData(noanswerslist);
 
                     answersAdapter.notifyDataSetChanged();
 
                     if(answer!=null){
+
+                        submitAnswerrtoQuestion(queidd, answerfromserver, predictivetimetaken);
+                        getUserRanking();
+
                         if(answerfromserver.equalsIgnoreCase(answer)){
                             pointsearned.setText("correct answerrr");
                         }else {
@@ -347,7 +358,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
         notifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                getUserRanking();
             }
         });
     }
@@ -383,21 +394,10 @@ public class HomeFragment extends Fragment implements OnItemClick {
                 }
 
             }
-            Call<SubmitAnswerToQuestion> call = service.answerQuestion("u1",sharedPreferenceManager.getGameId(),quesid,answer, correctanswer,timetaken);
-            call.enqueue(new Callback<SubmitAnswerToQuestion>() {
-                @Override
-                public void onResponse(Call<SubmitAnswerToQuestion> call, retrofit2.Response<SubmitAnswerToQuestion> response) {
+            Log.e(TAG, "onClick: useridddddddd "+sharedPreferenceManager.getUserId() );
 
-                    if(response!=null && response.code()==200 ){
-
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<SubmitAnswerToQuestion> call, Throwable t) {
-
-                }
-            });
+            submitAnswerrtoQuestion(quesid, correctanswer, timetaken);
+            getUserRanking();
 
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -410,6 +410,10 @@ public class HomeFragment extends Fragment implements OnItemClick {
 
         }else{
             progresslayout.setVisibility(View.GONE);
+            int timeinsec1 = Integer.parseInt(timeout);
+            int time = timeinsec1- second;
+            predictivetimetaken = String.valueOf(time);
+
             myCountDownTimer.cancel();
             guesstheoutcomelayout.setVisibility(View.GONE);
             analysingresults.setVisibility(View.VISIBLE);
@@ -417,6 +421,24 @@ public class HomeFragment extends Fragment implements OnItemClick {
             pointsearned.setText("");
 
         }
+    }
+
+    private void submitAnswerrtoQuestion(String quesid, String correctanswer, String timetaken) {
+        Call<SubmitAnswerToQuestion> call = service.answerQuestion(sharedPreferenceManager.getUserId(),sharedPreferenceManager.getGameId(),quesid,answer, correctanswer,timetaken);
+        call.enqueue(new Callback<SubmitAnswerToQuestion>() {
+            @Override
+            public void onResponse(Call<SubmitAnswerToQuestion> call, retrofit2.Response<SubmitAnswerToQuestion> response) {
+
+                if(response!=null && response.code()==200 ){
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SubmitAnswerToQuestion> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

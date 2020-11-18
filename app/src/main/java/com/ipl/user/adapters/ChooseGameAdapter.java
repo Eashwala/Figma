@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.ipl.user.R;
 import com.ipl.user.apiutils.APIInterface;
 import com.ipl.user.commonutils.SharedPreferenceManager;
@@ -78,18 +79,32 @@ public class ChooseGameAdapter extends RecyclerView.Adapter<ChooseGameAdapter.My
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //set what would happen when positive button is clicked
-
-                               // joinGame(gameslist.get(position).getId());
-
-                                String gametags = gameslist.get(position).getContent();
-
-                                List<String> stringArray = Arrays.asList(gametags.split("VS", -1));
-
-
                                 sharedPreferenceManager.setGameId(gameslist.get(position).getId());
-                                sharedPreferenceManager.setGameTittle(stringArray.get(0));
-                                sharedPreferenceManager.setGamePlayer2(stringArray.get(1));
-                                ((ChooseGameActivity)context).onBackPressed();
+
+                                String gamecontent = gameslist.get(position).getContent();
+
+                                if(gamecontent!=null && !gamecontent.isEmpty() && gamecontent.contains("VS")){
+                                    List<String> stringArray = Arrays.asList(gamecontent.split("VS", -1));
+
+                                    if(stringArray.get(0)!=null && !stringArray.get(0).isEmpty()){
+                                        sharedPreferenceManager.setGameTittle(stringArray.get(0));
+                                    }
+                                    if(stringArray.get(1)!=null && !stringArray.get(1).isEmpty()){
+                                        sharedPreferenceManager.setGamePlayer2(stringArray.get(1));
+                                    }
+
+
+                                }else{
+                                    sharedPreferenceManager.setGameTittle(gamecontent);
+                                    sharedPreferenceManager.setGamePlayer2("");
+                                }
+
+
+                                 joinGame(gameslist.get(position).getId());
+
+
+
+
 
                             }
                         })
@@ -107,17 +122,17 @@ public class ChooseGameAdapter extends RecyclerView.Adapter<ChooseGameAdapter.My
             }
         });
 
-//      Glide.with(context).load(""+gameslist.get(position).getCoverPhoto()).centerCrop().into(holder.gameimage);
+      Glide.with(context).load(""+gameslist.get(position).getCoverPhoto()).centerCrop().placeholder(R.drawable.dummyimage).into(holder.gameimage);
     }
 
     private void joinGame(String gameid) {
 
-        Call<BlankResponse> call = service.joingame(gameid, "");
+        Call<BlankResponse> call = service.joingame(gameid, sharedPreferenceManager.getUserId());
         call.enqueue(new Callback<BlankResponse>() {
             @Override
             public void onResponse(Call<BlankResponse> call, Response<BlankResponse> response) {
-                if(response!=null && response.body()!=null) {
-
+                if(response!=null && response.isSuccessful()) {
+                    ((ChooseGameActivity)context).onBackPressed();
                 }
             }
 

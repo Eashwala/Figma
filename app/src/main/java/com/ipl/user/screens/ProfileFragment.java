@@ -109,7 +109,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void getUserProfile() {
-        Call<UserRanking> call = service.getProfileRanking("u1","100");
+        Call<UserRanking> call = service.getProfileRanking(sharedPreferenceManager.getUserId(),"100",sharedPreferenceManager.getGameId() );
         call.enqueue(new Callback<UserRanking>() {
             @Override
             public void onResponse(Call<UserRanking> call, retrofit2.Response<UserRanking> response) {
