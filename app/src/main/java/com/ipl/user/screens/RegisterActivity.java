@@ -21,7 +21,7 @@ import com.ipl.user.commonutils.MyCognito;
 public class RegisterActivity extends AppCompatActivity {
 
     TextView registeruser;
-    EditText firstnameregister, lastnamerregister,mobilenumberregister, emailregister ,passwordregister,cnfPassword;
+    EditText firstnameregister,emailregister ,passwordregister,cnfPassword;
     MyCognito cognito;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     final String passwordpattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
@@ -36,11 +36,9 @@ public class RegisterActivity extends AppCompatActivity {
         registeruser = findViewById(R.id.registeruser);
 
         firstnameregister = findViewById(R.id.firstnameregister);
-        lastnamerregister = findViewById(R.id.lastnamerregister);
         emailregister = findViewById(R.id.emailregister);
         registerprogbar = findViewById(R.id.registerprogbar);
 
-        mobilenumberregister = findViewById(R.id.mobilenumberregister);
         passwordregister= findViewById(R.id.passwordregister);
         cnfPassword = findViewById(R.id.cnfPassword);
          cognito= new MyCognito(getApplicationContext());
@@ -52,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                registeruser.setEnabled(false);
 
                 if(validate()){
                     registerUser();
@@ -66,9 +65,6 @@ public class RegisterActivity extends AppCompatActivity {
         registerprogbar.setVisibility(View.VISIBLE);
         CognitoUserAttributes userAttributes = new CognitoUserAttributes();
        userAttributes.addAttribute("name", firstnameregister.getText().toString().trim());
-        userAttributes.addAttribute("family_name",  lastnamerregister.getText().toString().trim());
-        userAttributes.addAttribute("phone_number", "+91"+mobilenumberregister.getText().toString().trim());
-
 
         SignUpHandler signUpCallback = new SignUpHandler() {
             @Override
@@ -105,14 +101,13 @@ public class RegisterActivity extends AppCompatActivity {
         };
 
         cognito.signUpInBackground(emailregister.getText().toString(),passwordregister.getText().toString(), userAttributes, signUpCallback);//mobilenumberregister.getText().toString(), passwordregister.getText().toString(), userAttributes);
+        registeruser.setEnabled(true);
     }
     private boolean validate() {
         boolean valid = true;
         String firstname1 = firstnameregister.getText().toString();
-        String lastname1 = lastnamerregister.getText().toString();
         String email1 =  emailregister.getText().toString();
-        String mobilenumber1 = mobilenumberregister.getText().toString();
-        String mobilenumberpassword1 = passwordregister.getText().toString();
+        String pass1 = passwordregister.getText().toString();
         String cnfpassword1 =  cnfPassword.getText().toString();
 
         if (firstname1.isEmpty()) {
@@ -121,15 +116,6 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             firstnameregister.setError(null);
         }
-        if (lastname1.isEmpty() ) {
-            lastnamerregister.setError("enter last name");
-            valid = false;
-        } else {
-            lastnamerregister.setError(null);
-        }
-
-
-
         if (email1.isEmpty() ) {
             emailregister.setError("enter email id ");
             valid = false;
@@ -144,14 +130,7 @@ public class RegisterActivity extends AppCompatActivity {
             emailregister.setError(null);
         }
 
-        if (mobilenumber1.isEmpty()) {
-            mobilenumberregister.setError("enter mobile number");
-            valid = false;
-        } else {
-            mobilenumberregister.setError(null);
-        }
-
-        if (mobilenumberpassword1.isEmpty() || mobilenumberpassword1.length() < 5) {
+        if (pass1.isEmpty() || pass1.length() < 5) {
             passwordregister.setError("password cannot be less than 6 characters");
             valid = false;
         } else {
@@ -164,7 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
             cnfPassword.setError(null);
         }
 
-        if(!mobilenumberpassword1.equalsIgnoreCase(cnfpassword1)){
+        if(!pass1.equalsIgnoreCase(cnfpassword1)){
             cnfPassword.setError("Passwords didn't match");
         }
 

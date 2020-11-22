@@ -89,6 +89,7 @@ public class ProfileFragment extends Fragment {
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                                 cognito.userLogout();
+                                sharedPreferenceManager.clearAllPreferences();
                                 Intent intent = new Intent(getActivity(), SignUp.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class MobileVerfication extends AppCompatActivity {
     EditText e1, e2, e3, e4, e5, e6;
-    TextView resendcode, mobileotpverify;
+    TextView resendcode, mobileotpverify, verficationemail;
     String e11, e22, e33, e44, e55, e66;
     ArrayList<String> editlist = new ArrayList<>();
     MyCognito cognito;
@@ -48,9 +48,11 @@ public class MobileVerfication extends AppCompatActivity {
         e6 =findViewById(R.id.e6);
 
         mobileotpverify  =findViewById(R.id.mobileotpverify);
+        verficationemail =findViewById(R.id.verficationemail);
         cognito = new MyCognito(getApplicationContext());
 
 
+        verficationemail.setText(getResources().getString(R.string.enter_the_4_digit_code_just_sent_to, user_id));
 
         resendcode.setOnClickListener(new View.OnClickListener() {
             @Override

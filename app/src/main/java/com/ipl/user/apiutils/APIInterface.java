@@ -18,6 +18,8 @@ public interface APIInterface {
 //
 //  {{httpEndPoint}}/userranking?userId=u2&limit=1&gameId=0ac75bb0-071f-11eb-b2f0-450080cc1788
 
+
+  //  {{httpEndPoint}}/answerquestion?userId=72384a41-db82-4282-a097-ec77737ba01f&matchId=a827b670-2966-11eb-ad4a-8d5bf3f0acfc&questionId=188733c0-2af5-11eb-ac4c-0515b323eacc&userAnswer=4&correctAnswer=4&timeTaken=10
     @POST("answerquestion")
     Call<SubmitAnswerToQuestion> answerQuestion(@Query("userId") String userId, @Query("matchId") String matchId, @Query("questionId") String questionId, @Query("userAnswer") String userAnswer, @Query("correctAnswer") String correctAnswer, @Query("timeTaken") String timeTaken);
 

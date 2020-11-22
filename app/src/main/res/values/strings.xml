@@ -48,7 +48,7 @@
     <string name="continue_with_facebook">CONTINUE WITH FACEBOOK</string>
     <string name="continue_with_google">CONTINUE WITH GOOGLE</string>
     <string name="welcome">Welcome</string>
-    <string name="enter_the_4_digit_code_just_sent_to">Enter the 6-digit code just sent to</string>
+    <string name="enter_the_4_digit_code_just_sent_to">Enter the 6-digit code just sent to %s</string>
     <string name="didn_t_receive_the_code">Didn’t receive the code?</string>
     <string name="resend"> Resend</string>
     <string name="over_view">Over view</string>

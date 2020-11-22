@@ -25,7 +25,7 @@ public class IplSocketConnection implements ClientWebSocket.MessageListener {
 
     private Runnable checkConnectionRunnable = new Runnable() {
         public void run() {
-            if (!clientWebSocket.getConnection().isOpen()) {
+            if (  clientWebSocket.getConnection()!=null && !clientWebSocket.getConnection().isOpen()) {
                 openConnection(gameid);
             }
             startCheckConnection();

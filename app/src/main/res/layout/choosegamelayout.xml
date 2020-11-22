@@ -25,17 +25,38 @@
                 android:scaleType="fitXY"
                 android:background="@drawable/gameimagebackground"
                 android:src="@drawable/dummyimage" />
-            <TextView
-                android:id="@+id/gamecategory"
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="6dp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/mulishbold"
-                android:textSize="12sp"
-                android:text="@string/rank"/>
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/gamecategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="6dp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/mulishbold"
+                    android:textSize="12sp"
+                    android:text="@string/rank"/>
+
+                <TextView
+                    android:id="@+id/gamestatus"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="6dp"
+                    android:textColor="@color/blueprimary"
+                    android:fontFamily="@font/mulishbold"
+                    android:textSize="12sp"
+                    android:text="@string/rank"/>
+
+            </RelativeLayout>
+
 
             <TextView
                 android:id="@+id/gametittle"

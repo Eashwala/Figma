@@ -179,6 +179,9 @@ public class HomeFragment extends Fragment implements OnItemClick {
 
     private void getUserRanking() {
 
+        Log.e(TAG, "getUserRanking: "+sharedPreferenceManager.getUserId() );
+        Log.e(TAG, "getUserRanking: "+sharedPreferenceManager.getGameId() );
+
         Call<UserRanking> call = service.getUserRanking(sharedPreferenceManager.getUserId(),"100",sharedPreferenceManager.getGameId());
         call.enqueue(new Callback<UserRanking>() {
             @Override
@@ -296,12 +299,11 @@ public class HomeFragment extends Fragment implements OnItemClick {
                     if(answer!=null){
 
                         submitAnswerrtoQuestion(queidd, answerfromserver, predictivetimetaken);
-                        getUserRanking();
 
                         if(answerfromserver.equalsIgnoreCase(answer)){
-                            pointsearned.setText("correct answerrr");
+                            pointsearned.setText("Yay.. its a correct answer");
                         }else {
-                            pointsearned.setText("wrong  answerrrrr");
+                            pointsearned.setText("Wrong answer");
                         }
 
                         new Handler().postDelayed(new Runnable() {
@@ -358,7 +360,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
         notifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getUserRanking();
+                 getUserRanking();
             }
         });
     }
@@ -397,8 +399,6 @@ public class HomeFragment extends Fragment implements OnItemClick {
             Log.e(TAG, "onClick: useridddddddd "+sharedPreferenceManager.getUserId() );
 
             submitAnswerrtoQuestion(quesid, correctanswer, timetaken);
-            getUserRanking();
-
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -430,6 +430,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
             public void onResponse(Call<SubmitAnswerToQuestion> call, retrofit2.Response<SubmitAnswerToQuestion> response) {
 
                 if(response!=null && response.code()==200 ){
+                    Log.e(TAG, "onResponse: "+response.body().toString() );
 
                 }
             }

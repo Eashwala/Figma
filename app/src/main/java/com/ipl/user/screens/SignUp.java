@@ -60,7 +60,7 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
     String userid;
     ProgressBar signupprogbar;
     CognitoUserSession cognitoUserSession;
-boolean isPasswordVisible;
+    boolean isPasswordVisible;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     final String passwordpattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
 
@@ -132,7 +132,7 @@ boolean isPasswordVisible;
                             // set drawable image
                             passwordlogin.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_baseline_visibility_off_24, 0);
                             // hide Password
-                                passwordlogin.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                            passwordlogin.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                             isPasswordVisible = false;
                         } else  {
                             // set drawable image
@@ -152,7 +152,7 @@ boolean isPasswordVisible;
             @Override
             public void onClick(View view) {
 
-
+mobileusersignin.setEnabled(false);
                 if(validate()){
                     loginUser();
                 }
@@ -241,6 +241,8 @@ boolean isPasswordVisible;
             }
         };
         myCognito.userLogin(emaillogin.getText().toString().trim(),passwordlogin.getText().toString().trim(), authenticationHandler, cognitoUserSession);//mobilenumber.getText().toString(), mobilenumberpassword.getText().toString());
+
+        mobileusersignin.setEnabled(true);
     }
 
     private boolean validate() {
@@ -358,8 +360,6 @@ boolean isPasswordVisible;
             //  {"id":"3434184853369660","email":"easwalanidumolu@gmail.com","first_name":"Easha","last_name":"Surendra","name":"Easha Surendra"}
             //   myCognito.signInFacebook(accessToken);
             //  sharedPreferenceManager.setUserLoggedIn(true);
-
-
 
 //            AWSMobileClient.getInstance().federatedSignIn(
 //                    IdentityProviders.FACEBOOK.toString(), accessToken, new Callback<UserState>() {
