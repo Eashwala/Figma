@@ -8,6 +8,14 @@ public class BlankResponse {
     @Expose
     private String id;
 
+    @SerializedName("gameId")
+    @Expose
+    private String gameId;
+
+    @SerializedName("userId")
+    @Expose
+    private String userId;
+
     public String getId() {
         return id;
     }
@@ -16,4 +24,19 @@ public class BlankResponse {
         this.id = id;
     }
 
+    public String getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }

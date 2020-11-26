@@ -152,7 +152,6 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
             @Override
             public void onClick(View view) {
 
-mobileusersignin.setEnabled(false);
                 if(validate()){
                     loginUser();
                 }
@@ -163,6 +162,7 @@ mobileusersignin.setEnabled(false);
 
     private void loginUser() {
         signupprogbar.setVisibility(View.VISIBLE);
+        mobileusersignin.setEnabled(false);
 
         AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
             @Override
@@ -175,6 +175,7 @@ mobileusersignin.setEnabled(false);
                 sharedPreferenceManager.setUserLoggedIn(true);
                 sharedPreferenceManager.setUserId(userSession.getUsername());
                 signupprogbar.setVisibility(View.GONE);
+                mobileusersignin.setEnabled(false);
                 Intent ii = new Intent(SignUp.this, MainActivity.class);
                 ii.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(ii);
@@ -194,6 +195,7 @@ mobileusersignin.setEnabled(false);
             @Override
             public void onFailure(Exception e) {
                 signupprogbar.setVisibility(View.GONE);
+                mobileusersignin.setEnabled(false);
 
                 if (e instanceof AmazonServiceException ) {
 
@@ -242,6 +244,7 @@ mobileusersignin.setEnabled(false);
         };
         myCognito.userLogin(emaillogin.getText().toString().trim(),passwordlogin.getText().toString().trim(), authenticationHandler, cognitoUserSession);//mobilenumber.getText().toString(), mobilenumberpassword.getText().toString());
 
+        signupprogbar.setVisibility(View.GONE);
         mobileusersignin.setEnabled(true);
     }
 

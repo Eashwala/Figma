@@ -49,9 +49,6 @@ public class RegisterActivity extends AppCompatActivity {
         registeruser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                registeruser.setEnabled(false);
-
                 if(validate()){
                     registerUser();
                 }
@@ -63,6 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerUser() {
         registerprogbar.setVisibility(View.VISIBLE);
+        registeruser.setEnabled(false);
         CognitoUserAttributes userAttributes = new CognitoUserAttributes();
        userAttributes.addAttribute("name", firstnameregister.getText().toString().trim());
 
@@ -71,6 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onSuccess(CognitoUser cognitoUser, boolean userConfirmed, CognitoUserCodeDeliveryDetails cognitoUserCodeDeliveryDetails) {
                 // Sign-up was successful
                 registerprogbar.setVisibility(View.GONE);
+                registeruser.setEnabled(true);
                 Intent ii = new Intent(getApplication(), MobileVerfication.class);
                 ii.putExtra("userId", emailregister.getText().toString());
                 ii.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -101,6 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
         };
 
         cognito.signUpInBackground(emailregister.getText().toString(),passwordregister.getText().toString(), userAttributes, signUpCallback);//mobilenumberregister.getText().toString(), passwordregister.getText().toString(), userAttributes);
+        registerprogbar.setVisibility(View.GONE);
         registeruser.setEnabled(true);
     }
     private boolean validate() {
