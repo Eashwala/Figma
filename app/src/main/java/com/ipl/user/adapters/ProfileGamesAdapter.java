@@ -11,7 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.ipl.user.R;
+import com.ipl.user.model.Game;
 
 import java.util.List;
 
@@ -20,9 +22,9 @@ import java.util.List;
 public class ProfileGamesAdapter extends RecyclerView.Adapter<ProfileGamesAdapter.MyViewHolder> {
 
     private Context context;
-    List<String> profilegameslist;
+    List<Game> profilegameslist;
 
-    public ProfileGamesAdapter(Context context, List<String> profilegameslist) {
+    public ProfileGamesAdapter(Context context, List<Game> profilegameslist) {
         this.profilegameslist = profilegameslist;
         this.context=context;
     }
@@ -38,10 +40,9 @@ public class ProfileGamesAdapter extends RecyclerView.Adapter<ProfileGamesAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-        holder.prof_achivement.setText(profilegameslist.get(position).toString());
-//        holder.gametittle.setText(profilegameslist.get(position).toString());
-//        holder.gamedescription.setText(profilegameslist.get(position).toString());
+        holder.prof_achivement.setText(profilegameslist.get(position).getTitle());
 
+        Glide.with(context).load(""+profilegameslist.get(position).getCoverPhoto()).centerCrop().placeholder(R.drawable.dummyimage).into(holder.prof_game_image);
 
     }
 

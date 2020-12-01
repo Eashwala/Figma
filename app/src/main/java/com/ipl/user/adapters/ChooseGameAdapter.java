@@ -1,3 +1,5 @@
+
+
 package com.ipl.user.adapters;
 
 import android.app.AlertDialog;
@@ -76,8 +78,7 @@ public class ChooseGameAdapter extends RecyclerView.Adapter<ChooseGameAdapter.My
         holder.gamecard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //   if(gameslist.get(position).getState().equalsIgnoreCase("Started")){
+               // if(gameslist.get(position).getState().equalsIgnoreCase("Started")){
                 AlertDialog alertDialog = new AlertDialog.Builder(context,  R.style.AlertDialogStyle)
                         //.setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle("Game Selected")
@@ -109,9 +110,9 @@ public class ChooseGameAdapter extends RecyclerView.Adapter<ChooseGameAdapter.My
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
-                                sharedPreferenceManager.setGameId("");
-                                sharedPreferenceManager.setGameTittle("");
-                                sharedPreferenceManager.setGamePlayer2("");
+//                                sharedPreferenceManager.setGameId("");
+//                                sharedPreferenceManager.setGameTittle("");
+//                                sharedPreferenceManager.setGamePlayer2("");
                                 // ((ChooseGameActivity)context).onBackPressed();
                             }
                         })

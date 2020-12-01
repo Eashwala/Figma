@@ -38,4 +38,9 @@ public interface APIInterface {
     @GET("userranking")
     Call<UserRanking> getProfileRanking(@Query("userId")  String userId, @Query("limit")  String limit, @Query("gameId")  String gameId);
 
+    //{{httpEndPoint}}/listgamesforuser?userId=85ccf668-507a-4373-8523-f1defb7e5f91
+
+  @GET("listgamesforuser")
+  Call<GamesList> listgamesforuser(@Query("userId")  String userId);
+
 }

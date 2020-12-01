@@ -21,21 +21,22 @@ import com.ipl.user.apiutils.APIInterface;
 import com.ipl.user.apiutils.ApiClient;
 import com.ipl.user.commonutils.MyCognito;
 import com.ipl.user.commonutils.SharedPreferenceManager;
+import com.ipl.user.model.Game;
+import com.ipl.user.model.GamesList;
 import com.ipl.user.model.Ranking;
 import com.ipl.user.model.UserRanking;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
     TextView prof_points_score, prof_games_score, prof_rank_score;
     ImageView prof_settings, logout;
     RecyclerView profile_games_recyc;
-    ArrayList<String> profile_gameslist = new ArrayList<>(Arrays.asList("Game 1", "Game 2", "Game 3", "Game 4"));
     APIInterface service;
     SharedPreferenceManager sharedPreferenceManager;
     MyCognito cognito;
@@ -66,14 +67,36 @@ public class ProfileFragment extends Fragment {
 
         profile_games_recyc = view.findViewById(R.id.profile_games_recyc);
 
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false);
-        profile_games_recyc.setLayoutManager(llm);
-        ProfileGamesAdapter profileGamesAdapter = new ProfileGamesAdapter(getActivity(), profile_gameslist);
-        profile_games_recyc.setAdapter(profileGamesAdapter);
         getUserProfile();
+        listGamesForUser();
         onclicks();
         return view;
 
+    }
+
+    private void listGamesForUser() {
+        Call<GamesList> call = service.listgamesforuser(sharedPreferenceManager.getUserId());
+        call.enqueue(new Callback<GamesList>() {
+            @Override
+            public void onResponse(Call<GamesList> call, Response<GamesList> response) {
+                if(response!=null && response.body()!=null) {
+                    GamesList gamesList = response.body();
+                    sendDataTodapter(gamesList.getGames(), sharedPreferenceManager);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GamesList> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void sendDataTodapter(List<Game> games, SharedPreferenceManager sharedPreferenceManager) {
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false);
+        profile_games_recyc.setLayoutManager(llm);
+        ProfileGamesAdapter profileGamesAdapter = new ProfileGamesAdapter(getActivity(), games);
+        profile_games_recyc.setAdapter(profileGamesAdapter);
     }
 
     private void onclicks() {

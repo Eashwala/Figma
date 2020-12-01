@@ -16,6 +16,7 @@ import com.ipl.user.commonutils.SharedPreferenceManager;
 import com.ipl.user.model.Game;
 import com.ipl.user.model.GamesList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -56,14 +57,14 @@ public class ChooseGameActivity extends AppCompatActivity {
             public void onResponse(Call<GamesList> call, Response<GamesList> response) {
                 if(response!=null && response.body()!=null) {
                     GamesList gamesList = response.body();
-//
-//                    List<Game> gg = new ArrayList<>();
-//                    for(int i=0; i<gamesList.getGames().size(); i++){
-//                        if(!gamesList.getGames().get(i).getState().equalsIgnoreCase("Stopped")){
-//                            gg.add(gamesList.getGames().get(i));
-//                        }
-//                    }
-                    sendDataTodapter(gamesList.getGames(), sharedPreferenceManager);
+
+                    List<Game> gg = new ArrayList<>();
+                    for(int i=0; i<gamesList.getGames().size(); i++){
+                        if(!gamesList.getGames().get(i).getState().equalsIgnoreCase("Stopped")){
+                            gg.add(gamesList.getGames().get(i));
+                        }
+                    }
+                    sendDataTodapter(gg, sharedPreferenceManager);
                 }
             }
 
