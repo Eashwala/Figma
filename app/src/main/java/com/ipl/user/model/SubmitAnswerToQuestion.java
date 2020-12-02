@@ -16,4 +16,16 @@ public class SubmitAnswerToQuestion {
     public void setAttributes(Attributes attributes) {
         this.attributes = attributes;
     }
+
+    @SerializedName("point")
+    @Expose
+    private Integer point;
+
+    public Integer getPoint() {
+        return point;
+    }
+
+    public void setPoint(Integer point) {
+        this.point = point;
+    }
 }

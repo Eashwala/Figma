@@ -58,6 +58,7 @@
     <string name="total">TOTAL</string>
     <string name="recommended">Recommended</string>
     <string name="sort_by">Sort by</string>
+    <string name="game_has_been_completed">Game has been completed!</string>
 
 
 </resources>

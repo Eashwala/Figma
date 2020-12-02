@@ -41,7 +41,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 public class HomeFragment extends Fragment implements OnItemClick {
-    LinearLayout guesstheoutcomelayout, analysingresults, preparingresults;
+    LinearLayout guesstheoutcomelayout, analysingresults, preparingresults, gameended;
     ImageView bookmark, notifications, location_icon, rightarrow;
     TextView  timeleftquestions, pointsearned, player1_score, player2, points_score, rank_score,live_score ;
     ProgressBar progressbartimeleft, progressbaranalysingresults, progressBarpreparingresults;
@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
     SharedPreferenceManager sharedPreferenceManager;
     MyCountDownTimer myCountDownTimer;
     String timeout;
-    int second;
+    int second, pointfromapi;
     String predictivetimetaken;
 
     APIInterface service;
@@ -104,6 +104,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
         guesstheoutcomelayout = view.findViewById(R.id.guesstheoutcomelayout);
         analysingresults = view.findViewById(R.id.analysingresults);
         preparingresults = view.findViewById(R.id.preparingresults);
+        gameended = view.findViewById(R.id.gameended);
 
         progresslayout = view.findViewById(R.id.progresslayout);
 
@@ -161,6 +162,9 @@ public class HomeFragment extends Fragment implements OnItemClick {
                     iplSocketApplication.openSocketConnection(newgameid);
                     selectgamelayout.setVisibility(View.GONE);
                     toplayout.setVisibility(View.VISIBLE);
+                    gameended.setVisibility(View.GONE);
+                    rank_score.setText("0");
+                    points_score.setText("0");
                     player1_score.setText(sharedPreferenceManager.getGameTittle());
                     player2.setText(sharedPreferenceManager.getGamePlayer2());
                     Log.e(TAG, "onResume: socketopeneddd" );
@@ -173,7 +177,6 @@ public class HomeFragment extends Fragment implements OnItemClick {
             toplayout.setVisibility(View.GONE);
             player1_score.setText("Select a Game");
             player2.setText("");
-
         }
     }
 
@@ -198,10 +201,10 @@ public class HomeFragment extends Fragment implements OnItemClick {
                         for(int i=0;i<userRanking.getRankings().size();i++){
                             rankingList = userRanking.getRankings();
 
-                       if(rankingList.get(i).getId().equalsIgnoreCase(sharedPreferenceManager.getUserId())){
-                           points = String.valueOf(rankingList.get(i).getPoints());
+                            if(rankingList.get(i).getId().equalsIgnoreCase(sharedPreferenceManager.getUserId())){
+                                points = String.valueOf(rankingList.get(i).getPoints());
 
-                       }
+                            }
                         }
                     }
 
@@ -257,6 +260,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
                     guesstheoutcomelayout.setVisibility(View.VISIBLE);
                     preparingresults.setVisibility(View.GONE);
                     analysingresults.setVisibility(View.GONE);
+                    gameended.setVisibility(View.GONE);
 
                     String  ques = event.getMsgContent().getQuestion();
                     timeout = event.getMsgContent().getTimeOut();
@@ -314,6 +318,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
                                 guesstheoutcomelayout.setVisibility(View.GONE);
                                 analysingresults.setVisibility(View.GONE);
                                 preparingresults.setVisibility(View.VISIBLE);
+                                gameended.setVisibility(View.GONE);
                             }
                         }, 3000);
 
@@ -321,6 +326,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
                         guesstheoutcomelayout.setVisibility(View.GONE);
                         analysingresults.setVisibility(View.GONE);
                         preparingresults.setVisibility(View.VISIBLE);
+                        gameended.setVisibility(View.GONE);
                     }
 
                 }else if(msgType.equalsIgnoreCase("updateGameData")){
@@ -333,6 +339,12 @@ public class HomeFragment extends Fragment implements OnItemClick {
                     player2.setText(stringArray.get(1));
 
                     Log.e(TAG, "run: anwered quessssssssss success" );
+                }else if(msgType.equalsIgnoreCase("stopGame")){
+                    getUserRanking();
+                    guesstheoutcomelayout.setVisibility(View.GONE);
+                    analysingresults.setVisibility(View.GONE);
+                    preparingresults.setVisibility(View.GONE);
+                    gameended.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -360,7 +372,6 @@ public class HomeFragment extends Fragment implements OnItemClick {
         notifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 getUserRanking();
             }
         });
     }
@@ -429,10 +440,11 @@ public class HomeFragment extends Fragment implements OnItemClick {
             @Override
             public void onResponse(Call<SubmitAnswerToQuestion> call, retrofit2.Response<SubmitAnswerToQuestion> response) {
 
-                if(response!=null && response.code()==200 ){
-                    Log.e(TAG, "onResponse: "+response.body().toString() );
-
+                if(response!=null && response.body()!=null ){
+                    SubmitAnswerToQuestion submitAnswerToQuestion = response.body();
+                    pointfromapi += submitAnswerToQuestion.getPoint();
                 }
+                Log.e(TAG, "onResponse: ppp"+pointfromapi );
             }
 
             @Override
@@ -440,6 +452,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
 
             }
         });
+        points_score.setText(pointfromapi);
     }
 
     @Override

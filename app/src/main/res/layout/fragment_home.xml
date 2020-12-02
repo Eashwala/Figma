@@ -419,6 +419,33 @@ android:visibility="gone"
                   </RelativeLayout>
                </LinearLayout>
 
+               <LinearLayout
+                   android:visibility="gone"
+                   android:id="@+id/gameended"
+                   android:layout_width="match_parent"
+                   android:layout_height="350dp"
+                   android:orientation="vertical"
+                   android:gravity="center"
+                   android:background="@drawable/skybluedrawable"
+                   android:layout_marginTop="15dp">
+
+                     <RelativeLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:textSize="18sp"
+                            android:gravity="center"
+                            android:layout_centerInParent="true"
+                            android:textColor="@color/black"
+                            android:text="@string/game_has_been_completed"/>
+
+                     </RelativeLayout>
+               </LinearLayout>
+
+
             </LinearLayout>
 
          </LinearLayout>
