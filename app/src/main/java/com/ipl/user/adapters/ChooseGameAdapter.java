@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -78,7 +79,7 @@ public class ChooseGameAdapter extends RecyclerView.Adapter<ChooseGameAdapter.My
         holder.gamecard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // if(gameslist.get(position).getState().equalsIgnoreCase("Started")){
+                if(gameslist.get(position).getState().equalsIgnoreCase("Started")){
                 AlertDialog alertDialog = new AlertDialog.Builder(context,  R.style.AlertDialogStyle)
                         //.setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle("Game Selected")
@@ -117,12 +118,9 @@ public class ChooseGameAdapter extends RecyclerView.Adapter<ChooseGameAdapter.My
                             }
                         })
                         .show();
-//                }else{
-//                    Toast.makeText(context, "You cannot join the upcomming game",Toast.LENGTH_LONG).show();
-//
-//                }
-
-
+                }else{
+                    Toast.makeText(context, "You cannot join the upcomming game",Toast.LENGTH_LONG).show();
+                }
             }
         });
 

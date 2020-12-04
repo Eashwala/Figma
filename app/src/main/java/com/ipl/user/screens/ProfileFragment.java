@@ -40,6 +40,7 @@ public class ProfileFragment extends Fragment {
     APIInterface service;
     SharedPreferenceManager sharedPreferenceManager;
     MyCognito cognito;
+    int pointsscoredbuser=0, gamesplayedbyuser=0;
     public ProfileFragment() {
 
     }
@@ -50,8 +51,8 @@ public class ProfileFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        prof_points_score = view.findViewById(R.id.prof_points_score);
-        prof_games_score = view.findViewById(R.id.prof_games_score);
+        prof_points_score = view.findViewById(R.id.prof_pointsscore);
+        prof_games_score = view.findViewById(R.id.prof_gamescore);
         prof_rank_score = view.findViewById(R.id.prof_rank_score);
         service = ApiClient.getApiClientInstance().create(APIInterface.class);
         sharedPreferenceManager = SharedPreferenceManager.getInstance(getActivity());
@@ -59,16 +60,7 @@ public class ProfileFragment extends Fragment {
 
         prof_settings = view.findViewById(R.id.prof_settings);
         logout = view.findViewById(R.id.logout);
-
-
-
-
-
-
         profile_games_recyc = view.findViewById(R.id.profile_games_recyc);
-
-        getUserProfile();
-        listGamesForUser();
         onclicks();
         return view;
 
@@ -81,8 +73,17 @@ public class ProfileFragment extends Fragment {
             public void onResponse(Call<GamesList> call, Response<GamesList> response) {
                 if(response!=null && response.body()!=null) {
                     GamesList gamesList = response.body();
+                    for(int i =0; i<gamesList.getGames().size(); i++){
+
+                        if(gamesList.getGames().get(i) !=null && gamesList.getGames().get(i).getPoints()!=null)
+                            Log.e("TAG", "listGamesForUser: "+gamesList.getGames().get(i).getPoints() );
+                           pointsscoredbuser = pointsscoredbuser+ gamesList.getGames().get(i).getPoints();
+                    }
+                    gamesplayedbyuser = gamesList.getGames().size();
                     sendDataTodapter(gamesList.getGames(), sharedPreferenceManager);
                 }
+                prof_points_score.setText(String.valueOf(pointsscoredbuser));
+                prof_games_score.setText(String.valueOf(gamesplayedbyuser));
             }
 
             @Override
@@ -90,6 +91,7 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+
     }
 
     private void sendDataTodapter(List<Game> games, SharedPreferenceManager sharedPreferenceManager) {
@@ -138,28 +140,13 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onResponse(Call<UserRanking> call, retrofit2.Response<UserRanking> response) {
 
-                if(response!=null){
+                if(response!=null &&  response.body()!=null){
                     UserRanking userRanking = response.body();
-                    String points = null;
                     String rank = userRanking.getUserRank();
-                    List<Ranking> rankingList = new ArrayList<>();
-
-//                    if (userRanking.getRankings()!= null && userRanking.getRankings().size()>0 ){
-//                        for(int i=0;i<userRanking.getRankings().size();i++){
-//                            rankingList.add( userRanking.getRankings().get(i));
-//                        }
-//                    }
-                    Log.e("TAG", "onResponse: "+userRanking.getUserRank() );
-                    Log.e("TAG", "onResponse: "+rankingList );
-
-                    // selectgame.setText(rankingList.get(0).getPoints());
                     if(rank!=null && !rank.isEmpty()){
                         prof_rank_score.setText(rank);
                     }
-
-                //    prof_points_score.setText(rankingList.get(0).getPoints() );
                 }
-
             }
 
             @Override
@@ -169,4 +156,10 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getUserProfile();
+        listGamesForUser();
+    }
 }

@@ -41,8 +41,12 @@ public class ProfileGamesAdapter extends RecyclerView.Adapter<ProfileGamesAdapte
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         holder.prof_achivement.setText(profilegameslist.get(position).getTitle());
-
-        Glide.with(context).load(""+profilegameslist.get(position).getCoverPhoto()).centerCrop().placeholder(R.drawable.dummyimage).into(holder.prof_game_image);
+        holder.prof_progress_status.setText(profilegameslist.get(position).getPoints() + "/" + profilegameslist.get(position).getQPushed());
+        holder.prof_progressbar.setMax(profilegameslist.get(position).getQPushed());
+        holder.prof_progressbar.setProgress(profilegameslist.get(position).getPoints());
+        String url = "https://ipladminstoragebucket.s3.amazonaws.com/IMG-20201124-WA0022.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20201124T160310Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86399&X-Amz-Credential=AKIA5V66UOA45DTIQ6E6%2F20201124%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=a97013be474e3d70514359edfc81448b2c540e594a2f5ffad8f2738221be5d60";
+        Glide.with(context).load(profilegameslist.get(position).getCoverPhoto()).centerCrop().placeholder(R.drawable.dummyimage).into(holder.prof_game_image);
+      //  Glide.with(context).load(""+gameslist.get(position).getCoverPhoto()).centerCrop().placeholder(R.drawable.dummyimage).into(holder.games_image);
 
     }
 

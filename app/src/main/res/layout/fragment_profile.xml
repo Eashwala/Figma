@@ -101,15 +101,17 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/mulishlight"
                     android:text="@string/points"
+                    android:gravity="center"
                     android:textColor="#000"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/prof_points_score"
+                    android:id="@+id/prof_pointsscore"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/mulishbold"
                     android:text="0"
+                    android:gravity="center"
                     android:textColor="#000"
                     android:textSize="20sp" />
 
@@ -128,17 +130,17 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/mulishlight"
                     android:text="@string/games"
-
+                    android:gravity="center"
                     android:textColor="#000"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/prof_games_score"
+                    android:id="@+id/prof_gamescore"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/mulishbold"
+                    android:gravity="center"
                     android:text="0"
-
                     android:textColor="#000"
                     android:textSize="20sp" />
 
@@ -156,7 +158,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/mulishlight"
                     android:text="@string/rank"
-
+                    android:gravity="center"
                     android:textColor="#000"
                     android:textSize="12sp" />
 
@@ -166,6 +168,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/mulishbold"
                     android:text="0"
+                    android:gravity="center"
                     android:textColor="#000"
                     android:textSize="20sp" />
 

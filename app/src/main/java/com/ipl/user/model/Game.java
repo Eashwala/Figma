@@ -46,7 +46,40 @@ public class Game {
     @SerializedName("content")
     @Expose
     private String content;
+    @SerializedName("qPushed")
+    @Expose
+    private Integer qPushed;
+    @SerializedName("points")
+    @Expose
+    private Integer points;
+    @SerializedName("questionsAnswered")
+    @Expose
+    private Integer questionsAnswered;
 
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public Integer getQuestionsAnswered() {
+        return questionsAnswered;
+    }
+
+    public void setQuestionsAnswered(Integer questionsAnswered) {
+        this.questionsAnswered = questionsAnswered;
+    }
+
+
+    public Integer getQPushed() {
+        return qPushed;
+    }
+
+    public void setQPushed(Integer qPushed) {
+        this.qPushed = qPushed;
+    }
 
     public String getContent() {
         return content;

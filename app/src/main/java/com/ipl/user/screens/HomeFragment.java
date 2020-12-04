@@ -1,5 +1,7 @@
 package com.ipl.user.screens;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -132,8 +134,6 @@ public class HomeFragment extends Fragment implements OnItemClick {
         answersAdapter = new AnswersAdapter(getActivity(), this);
         answersrecyc.setAdapter(answersAdapter);
         onclicks();
-
-
     }
 
     private void startCountDownTimer() {
@@ -238,12 +238,41 @@ public class HomeFragment extends Fragment implements OnItemClick {
     public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
+        if(sharedPreferenceManager.getGameId()!=null && !sharedPreferenceManager.getGameId().isEmpty()){
+            String newgameid = sharedPreferenceManager.getGameId();
+            if(getActivity()!=null && newgameid!=null){
+                if(getActivity() != null && !iplSocketApplication.isSocketConnected()){
+                    iplSocketApplication.openSocketConnection(newgameid);
+//                    getUserRanking();
+                }
+                selectgamelayout.setVisibility(View.GONE);
+                toplayout.setVisibility(View.VISIBLE);
+                gameended.setVisibility(View.GONE);
+                rank_score.setText("0");
+                points_score.setText("0");
+                player1_score.setText(sharedPreferenceManager.getGameTittle());
+                player2.setText(sharedPreferenceManager.getGamePlayer2());
+                Log.e(TAG, "onResume: socketopeneddd" );
+            }
+
+        }else {
+            selectgamelayout.setVisibility(View.VISIBLE);
+            toplayout.setVisibility(View.GONE);
+            gameended.setVisibility(View.GONE);
+            player1_score.setText("Select a Game");
+            player2.setText("");
+        }
+
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         EventBus.getDefault().unregister(this);
+        preparingresults.setVisibility(View.VISIBLE);
+        analysingresults.setVisibility(View.GONE);
+        gameended.setVisibility(View.GONE);
     }
 
     @Subscribe
@@ -340,6 +369,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
 
                     Log.e(TAG, "run: anwered quessssssssss success" );
                 }else if(msgType.equalsIgnoreCase("stopGame")){
+                    pointfromapi=0;
                     getUserRanking();
                     guesstheoutcomelayout.setVisibility(View.GONE);
                     analysingresults.setVisibility(View.GONE);
@@ -364,8 +394,31 @@ public class HomeFragment extends Fragment implements OnItemClick {
         rightarrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent ii = new Intent(getActivity(), ChooseGameActivity.class);
-                startActivity(ii);
+                if(sharedPreferenceManager.getGameId()!=null && !sharedPreferenceManager.getGameId().isEmpty()) {
+
+                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity(),  R.style.AlertDialogStyle)
+                            //.setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Stop Game")
+                            .setMessage("Do You want to quit from the game ?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    sharedPreferenceManager.setGameId("");
+                                    Intent ii = new Intent(getActivity(), ChooseGameActivity.class);
+                                    startActivity(ii);
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            })
+                            .show();
+                }else{
+                    Intent ii = new Intent(getActivity(), ChooseGameActivity.class);
+                    startActivity(ii);
+                }
             }
         });
 
@@ -399,6 +452,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
             guesstheoutcomelayout.setVisibility(View.GONE);
             analysingresults.setVisibility(View.VISIBLE);
             preparingresults.setVisibility(View.GONE);
+            gameended.setVisibility(View.GONE);
             if(answer!=null) {
                 if (answer.equalsIgnoreCase(correctanswer)) {
                     pointsearned.setText("correct answerrr");
@@ -416,6 +470,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
                     guesstheoutcomelayout.setVisibility(View.GONE);
                     analysingresults.setVisibility(View.GONE);
                     preparingresults.setVisibility(View.VISIBLE);
+                    gameended.setVisibility(View.GONE);
                 }
             }, 3000);
 
@@ -429,6 +484,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
             guesstheoutcomelayout.setVisibility(View.GONE);
             analysingresults.setVisibility(View.VISIBLE);
             preparingresults.setVisibility(View.GONE);
+            gameended.setVisibility(View.GONE);
             pointsearned.setText("");
 
         }
@@ -442,9 +498,10 @@ public class HomeFragment extends Fragment implements OnItemClick {
 
                 if(response!=null && response.body()!=null ){
                     SubmitAnswerToQuestion submitAnswerToQuestion = response.body();
-                    pointfromapi += submitAnswerToQuestion.getPoint();
+                    pointfromapi = pointfromapi+ submitAnswerToQuestion.getPoint();
                 }
                 Log.e(TAG, "onResponse: ppp"+pointfromapi );
+                points_score.setText(String.valueOf(pointfromapi));
             }
 
             @Override
@@ -452,7 +509,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
 
             }
         });
-        points_score.setText(pointfromapi);
+
     }
 
     @Override
@@ -490,6 +547,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
             guesstheoutcomelayout.setVisibility(View.GONE);
             preparingresults.setVisibility(View.VISIBLE);
             analysingresults.setVisibility(View.GONE);
+            gameended.setVisibility(View.GONE);
         }
 
     }

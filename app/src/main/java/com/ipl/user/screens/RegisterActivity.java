@@ -1,8 +1,10 @@
 package com.ipl.user.screens;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,7 +23,7 @@ import com.ipl.user.commonutils.MyCognito;
 public class RegisterActivity extends AppCompatActivity {
 
     TextView registeruser;
-    EditText firstnameregister,emailregister ,passwordregister,cnfPassword;
+    EditText firstnameregister,emailregister ,passwordregister;
     MyCognito cognito;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     final String passwordpattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
@@ -40,7 +42,6 @@ public class RegisterActivity extends AppCompatActivity {
         registerprogbar = findViewById(R.id.registerprogbar);
 
         passwordregister= findViewById(R.id.passwordregister);
-        cnfPassword = findViewById(R.id.cnfPassword);
          cognito= new MyCognito(getApplicationContext());
          onclick();
     }
@@ -49,6 +50,8 @@ public class RegisterActivity extends AppCompatActivity {
         registeruser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 if(validate()){
                     registerUser();
                 }
@@ -59,8 +62,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser() {
-        registerprogbar.setVisibility(View.VISIBLE);
         registeruser.setEnabled(false);
+        registerprogbar.setVisibility(View.VISIBLE);
+
         CognitoUserAttributes userAttributes = new CognitoUserAttributes();
        userAttributes.addAttribute("name", firstnameregister.getText().toString().trim());
 
@@ -108,7 +112,6 @@ public class RegisterActivity extends AppCompatActivity {
         String firstname1 = firstnameregister.getText().toString();
         String email1 =  emailregister.getText().toString();
         String pass1 = passwordregister.getText().toString();
-        String cnfpassword1 =  cnfPassword.getText().toString();
 
         if (firstname1.isEmpty()) {
             firstnameregister.setError("enter first name");
@@ -136,24 +139,13 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             passwordregister.setError(null);
         }
-        if (cnfpassword1.isEmpty() || cnfpassword1.length() < 5) {
-            cnfPassword.setError("password cannot be less than 6 characters");
+
+        if (!pass1.matches(passwordpattern)) {
+            passwordregister.setError("Password must contain one Uppercase letter, lower case letter, special character and number");
             valid = false;
         } else {
-            cnfPassword.setError(null);
+            passwordregister.setError(null);
         }
-
-        if(!pass1.equalsIgnoreCase(cnfpassword1)){
-            cnfPassword.setError("Passwords didn't match");
-        }
-
-        if (!cnfpassword1.matches(passwordpattern)) {
-            cnfPassword.setError("Password must contain one Uppercase letter, lower case letter, special character and number");
-            valid = false;
-        } else {
-            cnfPassword.setError(null);
-        }
-
 
         return valid;
     }

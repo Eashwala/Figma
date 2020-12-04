@@ -1,6 +1,8 @@
 package com.ipl.user.screens;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -76,12 +79,14 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
         if(sharedPreferenceManager.getUserLoggedIn()){
             Intent i = new Intent(SignUp.this, MainActivity.class);
             startActivity(i);
+            finish();
         }else{
             initdata();
         }
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initdata() {
         countries_spinner = findViewById(R.id.countries_spinner);
         emaillogin = findViewById(R.id.emaillogin);
@@ -151,8 +156,11 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
         mobileusersignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 if(validate()){
+                    signupprogbar.setVisibility(View.VISIBLE);
+                    mobileusersignin.setEnabled(false);
                     loginUser();
                 }
             }
@@ -161,8 +169,6 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
     }
 
     private void loginUser() {
-        signupprogbar.setVisibility(View.VISIBLE);
-        mobileusersignin.setEnabled(false);
 
         AuthenticationHandler authenticationHandler = new AuthenticationHandler() {
             @Override
@@ -175,7 +181,7 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
                 sharedPreferenceManager.setUserLoggedIn(true);
                 sharedPreferenceManager.setUserId(userSession.getUsername());
                 signupprogbar.setVisibility(View.GONE);
-                mobileusersignin.setEnabled(false);
+                mobileusersignin.setEnabled(true);
                 Intent ii = new Intent(SignUp.this, MainActivity.class);
                 ii.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(ii);
@@ -194,15 +200,13 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
             }
             @Override
             public void onFailure(Exception e) {
-                signupprogbar.setVisibility(View.GONE);
-                mobileusersignin.setEnabled(false);
 
                 if (e instanceof AmazonServiceException ) {
 
                     switch (((AmazonServiceException) e).getErrorCode()){
                         case "UserNotConfirmedException":
 
-                            AlertDialog alertDialog = new AlertDialog.Builder(getApplicationContext(),  R.style.AlertDialogStyle)
+                            AlertDialog alertDialog = new AlertDialog.Builder(SignUp.this,  R.style.AlertDialogStyle)
                                     //.setIcon(android.R.drawable.ic_dialog_alert)
                                     .setTitle("Confirm User!!")
                                     .setMessage("OTP will be sent to email id")
@@ -240,6 +244,8 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
 
                     }
                 }
+                signupprogbar.setVisibility(View.GONE);
+                mobileusersignin.setEnabled(true);
             }
         };
         myCognito.userLogin(emaillogin.getText().toString().trim(),passwordlogin.getText().toString().trim(), authenticationHandler, cognitoUserSession);//mobilenumber.getText().toString(), mobilenumberpassword.getText().toString());
@@ -272,12 +278,12 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
         } else {
             passwordlogin.setError(null);
         }
-//        if (!password1.matches(passwordpattern)) {
-//            passwordlogin.setError("Password must contain one Uppercase letter, lower case letter, special character and number");
-//            valid = false;
-//        } else {
-//            passwordlogin.setError(null);
-//        }
+        if (!password1.matches(passwordpattern)) {
+            passwordlogin.setError("Password must contain one Uppercase letter, lower case letter, special character and number");
+            valid = false;
+        } else {
+            passwordlogin.setError(null);
+        }
 
         return valid;
     }

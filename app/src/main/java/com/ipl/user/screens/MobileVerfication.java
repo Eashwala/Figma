@@ -1,10 +1,12 @@
 package com.ipl.user.screens;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,7 +14,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHandler;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.VerificationHandler;
 import com.ipl.user.MainActivity;
 import com.ipl.user.R;
 import com.ipl.user.commonutils.MyCognito;
@@ -34,7 +38,6 @@ public class MobileVerfication extends AppCompatActivity {
 
         Intent i = new Intent();
         if(i!=null ){
-           // user_id = i.getStringExtra("");
              user_id = getIntent().getStringExtra("userId");
         }
 
@@ -57,12 +60,8 @@ public class MobileVerfication extends AppCompatActivity {
         resendcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
-              //  finish();
-
-             //   Toast.makeText(getApplicationContext(), editlist.toString(),Toast.LENGTH_LONG).show();
-            }
+                resendcodeToEmailId();
+          }
         });
 
         editwatcher();
@@ -70,6 +69,8 @@ public class MobileVerfication extends AppCompatActivity {
         mobileotpverify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 if(editlist.size()<6){
                     Toast.makeText(getApplicationContext(), "entercorrectotp",Toast.LENGTH_LONG).show();
                 }else{
@@ -113,6 +114,21 @@ public class MobileVerfication extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void resendcodeToEmailId() {
+            VerificationHandler vh = new VerificationHandler() {
+                @Override
+                public void onSuccess(CognitoUserCodeDeliveryDetails verificationCodeDeliveryMedium) {
+                    Toast.makeText(getApplicationContext(), "Code sent to "+user_id,Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onFailure(Exception exception) {
+
+                }
+            };
+            cognito.resendOtp(user_id, vh);
     }
 
     private void editwatcher() {
@@ -244,19 +260,12 @@ public class MobileVerfication extends AppCompatActivity {
                     e5.requestFocus();
                 }
             }
-
         });
-
-
-      //  Toast.makeText(getApplicationContext(), editlist.toString(),Toast.LENGTH_LONG).show();
-
-
     }
 
     @Override
     public void onBackPressed() {
       Toast.makeText(getApplicationContext(), "Verification not completed",Toast.LENGTH_LONG).show();
     }
-
 
 }
