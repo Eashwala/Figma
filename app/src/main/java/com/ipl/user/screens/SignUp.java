@@ -228,7 +228,7 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
 
                                                 }
                                             };
-                                            myCognito.resendOtp(emaillogin.getText().toString(), vh);
+                                            myCognito.resendOtp(emaillogin.getText().toString().trim(), vh);
 
                                         }
                                     })
@@ -255,8 +255,8 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
     private boolean validate() {
 
         boolean valid = true;
-        String email1 = emaillogin.getText().toString();
-        String password1 = passwordlogin.getText().toString();
+        String email1 = emaillogin.getText().toString().trim();
+        String password1 = passwordlogin.getText().toString().trim();
         if (email1.isEmpty()) {
             emaillogin.setError("enter mobile number");
             valid = false;

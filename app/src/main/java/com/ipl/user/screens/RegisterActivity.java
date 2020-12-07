@@ -106,13 +106,13 @@ public class RegisterActivity extends AppCompatActivity {
             }
         };
 
-        cognito.signUpInBackground(emailregister.getText().toString(),passwordregister.getText().toString(), userAttributes, signUpCallback);//mobilenumberregister.getText().toString(), passwordregister.getText().toString(), userAttributes);
+        cognito.signUpInBackground(emailregister.getText().toString().trim(),passwordregister.getText().toString().trim(), userAttributes, signUpCallback);//mobilenumberregister.getText().toString(), passwordregister.getText().toString(), userAttributes);
     }
     private boolean validate() {
         boolean valid = true;
-        String firstname1 = firstnameregister.getText().toString();
-        String email1 =  emailregister.getText().toString();
-        String pass1 = passwordregister.getText().toString();
+        String firstname1 = firstnameregister.getText().toString().trim();
+        String email1 =  emailregister.getText().toString().trim();
+        String pass1 = passwordregister.getText().toString().trim();
 
         if (firstname1.isEmpty()) {
             firstnameregister.setError("enter first name");
