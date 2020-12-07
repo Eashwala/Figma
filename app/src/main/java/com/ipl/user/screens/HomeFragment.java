@@ -75,12 +75,6 @@ public class HomeFragment extends Fragment implements OnItemClick {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-//        if( Utility.isNetworkAvailable(getActivity())){
-//
-//        }else {
-// Utility.retryInternet(getActivity());
-//        }
         init(view);
 
 
@@ -193,24 +187,28 @@ public class HomeFragment extends Fragment implements OnItemClick {
 
                 if (response!=null && response.isSuccessful()){
                     UserRanking userRanking = response.body();
-                    String points = null;
+                  //  int points = 0;
+                    int livemembers=0, points=0;
                     String rank = userRanking.getUserRank();
                     List<Ranking> rankingList = new ArrayList<>();
 
                     if (userRanking.getRankings()!= null && userRanking.getRankings().size()>0 ){
+                        livemembers =userRanking.getRankings().size();
                         for(int i=0;i<userRanking.getRankings().size();i++){
                             rankingList = userRanking.getRankings();
 
                             if(rankingList.get(i).getId().equalsIgnoreCase(sharedPreferenceManager.getUserId())){
-                                points = String.valueOf(rankingList.get(i).getPoints());
 
+                               Ranking rr = rankingList.get(i);
+                                points = rr.getPoints();
+  Log.e(TAG, "onResponse: userranking"+points );
                             }
                         }
                     }
-
-                    // selectgame.setText(rankingList.get(0).getPoints());
                     rank_score.setText(rank);
-                    points_score.setText(points);
+                    points_score.setText(String.valueOf(points));
+                    live_score.setText(String.valueOf(livemembers));
+
 
                 }else{
 
@@ -238,7 +236,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
     public void onResume() {
         super.onResume();
         if(sharedPreferenceManager.getGameId()!=null && !sharedPreferenceManager.getGameId().isEmpty()){
-getUserRanking();
+          getUserRanking();
         }
 
         EventBus.getDefault().register(this);

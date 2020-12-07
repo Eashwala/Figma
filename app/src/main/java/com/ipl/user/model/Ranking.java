@@ -14,9 +14,6 @@ public class Ranking {
     @SerializedName("points")
     @Expose
     private Integer points;
-    @SerializedName("questionsAnswered")
-    @Expose
-    private Integer questionsAnswered;
 
     public String getEntryType() {
         return entryType;
@@ -42,11 +39,4 @@ public class Ranking {
         this.points = points;
     }
 
-    public Integer getQuestionsAnswered() {
-        return questionsAnswered;
-    }
-
-    public void setQuestionsAnswered(Integer questionsAnswered) {
-        this.questionsAnswered = questionsAnswered;
-    }
 }
