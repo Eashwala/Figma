@@ -237,33 +237,11 @@ public class HomeFragment extends Fragment implements OnItemClick {
     @Override
     public void onResume() {
         super.onResume();
-        EventBus.getDefault().register(this);
         if(sharedPreferenceManager.getGameId()!=null && !sharedPreferenceManager.getGameId().isEmpty()){
-            String newgameid = sharedPreferenceManager.getGameId();
-            if(getActivity()!=null && newgameid!=null){
-                if(getActivity() != null && !iplSocketApplication.isSocketConnected()){
-                    iplSocketApplication.openSocketConnection(newgameid);
-//                    getUserRanking();
-                }
-                selectgamelayout.setVisibility(View.GONE);
-                toplayout.setVisibility(View.VISIBLE);
-                gameended.setVisibility(View.GONE);
-                rank_score.setText("0");
-                points_score.setText("0");
-                player1_score.setText(sharedPreferenceManager.getGameTittle());
-                player2.setText(sharedPreferenceManager.getGamePlayer2());
-                Log.e(TAG, "onResume: socketopeneddd" );
-            }
-
-        }else {
-            selectgamelayout.setVisibility(View.VISIBLE);
-            toplayout.setVisibility(View.GONE);
-            gameended.setVisibility(View.GONE);
-            player1_score.setText("Select a Game");
-            player2.setText("");
+getUserRanking();
         }
 
-
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -285,7 +263,6 @@ public class HomeFragment extends Fragment implements OnItemClick {
                 String  msgType = event.getMsgType();
                 Log.e(TAG, "run: "+ msgType );
                 if(msgType.equalsIgnoreCase("createQuestion")){
-
                     guesstheoutcomelayout.setVisibility(View.VISIBLE);
                     preparingresults.setVisibility(View.GONE);
                     analysingresults.setVisibility(View.GONE);
@@ -294,7 +271,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
                     String  ques = event.getMsgContent().getQuestion();
                     timeout = event.getMsgContent().getTimeOut();
                     question_name.setText(ques);
-
+                    Log.e(TAG, "run:ques  "+ ques );
                     List<String>  optionslist = new ArrayList<>();
                     optionslist= event.getMsgContent().getOptions();
 
@@ -312,51 +289,10 @@ public class HomeFragment extends Fragment implements OnItemClick {
 
                     progresslayout.setVisibility(View.VISIBLE);
                     startCountDownTimer();
-//                    if(event.getMsgContent().getQType().equalsIgnoreCase("predictive")){
-//                        progresslayout.setVisibility(View.GONE);
-//                        myCountDownTimer.cancel();
-//                    }else{
-//                        progresslayout.setVisibility(View.VISIBLE);
-//                        startCountDownTimer();
-//                    }
-
 
                 }else if(msgType.equalsIgnoreCase("closeQuestion")){
-                    question_name.setText("Sorry, question closed!");
-                    String answerfromserver =event.getMsgContent().getAnswer();
-                    String queidd =event.getMsgContent().getId();
-                    answersAdapter.updateData(noanswerslist);
 
-                    answersAdapter.notifyDataSetChanged();
-
-                    if(answer!=null){
-
-                        submitAnswerrtoQuestion(queidd, answerfromserver, predictivetimetaken);
-
-                        if(answerfromserver.equalsIgnoreCase(answer)){
-                            pointsearned.setText("Yay.. its a correct answer");
-                        }else {
-                            pointsearned.setText("Wrong answer");
-                        }
-
-                        new Handler().postDelayed(new Runnable() {
-
-
-                            @Override
-                            public void run() {
-                                guesstheoutcomelayout.setVisibility(View.GONE);
-                                analysingresults.setVisibility(View.GONE);
-                                preparingresults.setVisibility(View.VISIBLE);
-                                gameended.setVisibility(View.GONE);
-                            }
-                        }, 3000);
-
-                    }else{
-                        guesstheoutcomelayout.setVisibility(View.GONE);
-                        analysingresults.setVisibility(View.GONE);
-                        preparingresults.setVisibility(View.VISIBLE);
-                        gameended.setVisibility(View.GONE);
-                    }
+                    predicitveQuestionclosed(event);
 
                 }else if(msgType.equalsIgnoreCase("updateGameData")){
 
@@ -369,6 +305,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
 
                     Log.e(TAG, "run: anwered quessssssssss success" );
                 }else if(msgType.equalsIgnoreCase("stopGame")){
+                    Log.e(TAG, "run: stop gameeeeeeeee   ");
                     pointfromapi=0;
                     getUserRanking();
                     guesstheoutcomelayout.setVisibility(View.GONE);
@@ -376,9 +313,41 @@ public class HomeFragment extends Fragment implements OnItemClick {
                     preparingresults.setVisibility(View.GONE);
                     gameended.setVisibility(View.VISIBLE);
                 }
-
             }
         });
+    }
+
+    private void predicitveQuestionclosed(RealTimeEvent event) {
+
+        question_name.setText("Sorry, question closed!");
+        String answerfromserver =event.getMsgContent().getAnswer();
+        String queidd =event.getMsgContent().getQuestionId();
+        answersAdapter.updateData(noanswerslist);
+        Log.e(TAG, "run:ques close id "+ queidd );
+        if(answer!=null){
+            if(answerfromserver.equalsIgnoreCase(answer)){
+                pointsearned.setText("Yay.. its a correct answer");
+            }else {
+                pointsearned.setText("Wrong answer");
+            }
+            submitAnswerrtoQuestion(queidd, answerfromserver, predictivetimetaken);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    guesstheoutcomelayout.setVisibility(View.GONE);
+                    analysingresults.setVisibility(View.GONE);
+                    preparingresults.setVisibility(View.VISIBLE);
+                    gameended.setVisibility(View.GONE);
+                }
+            }, 3000);
+
+        }else{
+            guesstheoutcomelayout.setVisibility(View.GONE);
+            analysingresults.setVisibility(View.GONE);
+            preparingresults.setVisibility(View.VISIBLE);
+            gameended.setVisibility(View.GONE);
+        }
+
     }
 
     private void onclicks() {
@@ -436,7 +405,6 @@ public class HomeFragment extends Fragment implements OnItemClick {
 
     @Override
     public void onClick(String value) {
-
         answer = value;
         Log.e(TAG, "onclick"+ answer );
         String quesid = realTimeEvent.getMsgContent().getId();
@@ -495,7 +463,6 @@ public class HomeFragment extends Fragment implements OnItemClick {
         call.enqueue(new Callback<SubmitAnswerToQuestion>() {
             @Override
             public void onResponse(Call<SubmitAnswerToQuestion> call, retrofit2.Response<SubmitAnswerToQuestion> response) {
-
                 if(response!=null && response.body()!=null ){
                     SubmitAnswerToQuestion submitAnswerToQuestion = response.body();
                     pointfromapi = pointfromapi+ submitAnswerToQuestion.getPoint();
@@ -503,10 +470,8 @@ public class HomeFragment extends Fragment implements OnItemClick {
                 Log.e(TAG, "onResponse: ppp"+pointfromapi );
                 points_score.setText(String.valueOf(pointfromapi));
             }
-
             @Override
             public void onFailure(Call<SubmitAnswerToQuestion> call, Throwable t) {
-
             }
         });
 
@@ -551,5 +516,6 @@ public class HomeFragment extends Fragment implements OnItemClick {
         }
 
     }
+
 
 }

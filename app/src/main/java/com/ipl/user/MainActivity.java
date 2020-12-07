@@ -30,28 +30,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-      //  networkCheck = NetworkCheck.getInstance(getApplicationContext());
-
-        cognito = new MyCognito(getApplicationContext());
+       cognito = new MyCognito(getApplicationContext());
 
         sharedPreferenceManager = SharedPreferenceManager.getInstance(getApplicationContext());
-
-//        String userId = cognito.getUserIdFromCognito();
-//        sharedPreferenceManager.setUserId(userId);
-//
-        //Toast.makeText(getApplicationContext(), "userrrr"+ userId, Toast.LENGTH_LONG).show();
-
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         fm.beginTransaction().add(R.id.main_container, fragment2, "2").hide(fragment2).commit();
         fm.beginTransaction().add(R.id.main_container,fragment1, "1").commit();
-
-//        if(networkCheck.isConnectionAvailable()){
-//
-//
-//        }else{
-//
-//        }
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -78,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
-
         if (count == 0) {
             super.onBackPressed();
         } else {

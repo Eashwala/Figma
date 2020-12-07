@@ -159,9 +159,12 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        pointsscoredbuser=0;
+        gamesplayedbyuser=0;
         listGamesForUser();
         if(sharedPreferenceManager.getGameId()!=null && !sharedPreferenceManager.getGameId().isEmpty()){
             getUserProfile();
+
         }
 
     }

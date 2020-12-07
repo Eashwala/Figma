@@ -122,6 +122,7 @@
             android:layout_height="50dp"
             android:text="@string/continue_text"
             android:layout_marginTop="35dp"
+            android:enabled="true"
             android:layout_marginBottom="30dp"
             android:background="@drawable/button_drawable"
             android:gravity="center"

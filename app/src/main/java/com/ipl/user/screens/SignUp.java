@@ -202,6 +202,8 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
             public void onFailure(Exception e) {
 
                 if (e instanceof AmazonServiceException ) {
+                    signupprogbar.setVisibility(View.GONE);
+                    mobileusersignin.setEnabled(true);
 
                     switch (((AmazonServiceException) e).getErrorCode()){
                         case "UserNotConfirmedException":
@@ -244,14 +246,10 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
 
                     }
                 }
-                signupprogbar.setVisibility(View.GONE);
-                mobileusersignin.setEnabled(true);
             }
         };
         myCognito.userLogin(emaillogin.getText().toString().trim(),passwordlogin.getText().toString().trim(), authenticationHandler, cognitoUserSession);//mobilenumber.getText().toString(), mobilenumberpassword.getText().toString());
 
-        signupprogbar.setVisibility(View.GONE);
-        mobileusersignin.setEnabled(true);
     }
 
     private boolean validate() {

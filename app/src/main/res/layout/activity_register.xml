@@ -102,6 +102,7 @@
             android:layout_marginBottom="30dp"
             android:background="@drawable/button_drawable"
             android:gravity="center"
+            android:enabled="true"
             android:textColor="@color/white"
             android:fontFamily="@font/mulishbold"
             android:textSize="16sp"/>

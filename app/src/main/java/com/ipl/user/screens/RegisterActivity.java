@@ -90,6 +90,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Exception e) {
+                registerprogbar.setVisibility(View.GONE);
+                registeruser.setEnabled(true);
+
                 if (e instanceof AmazonServiceException) {
 
                     switch (((AmazonServiceException) e).getErrorCode()){
@@ -104,8 +107,6 @@ public class RegisterActivity extends AppCompatActivity {
         };
 
         cognito.signUpInBackground(emailregister.getText().toString(),passwordregister.getText().toString(), userAttributes, signUpCallback);//mobilenumberregister.getText().toString(), passwordregister.getText().toString(), userAttributes);
-        registerprogbar.setVisibility(View.GONE);
-        registeruser.setEnabled(true);
     }
     private boolean validate() {
         boolean valid = true;
