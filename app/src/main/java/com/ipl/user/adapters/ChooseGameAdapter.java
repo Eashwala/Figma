@@ -34,7 +34,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ChooseGameAdapter extends RecyclerView.Adapter<ChooseGameAdapter.MyViewHolder> {
-
     private Context context;
     List<Game> gameslist;
     SharedPreferenceManager sharedPreferenceManager;
@@ -66,8 +65,6 @@ public class ChooseGameAdapter extends RecyclerView.Adapter<ChooseGameAdapter.My
         }else{
             holder.gamestatus.setText("UP COMMING");
         }
-
-
         holder.gameimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,10 +108,6 @@ public class ChooseGameAdapter extends RecyclerView.Adapter<ChooseGameAdapter.My
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
-//                                sharedPreferenceManager.setGameId("");
-//                                sharedPreferenceManager.setGameTittle("");
-//                                sharedPreferenceManager.setGamePlayer2("");
-                                // ((ChooseGameActivity)context).onBackPressed();
                             }
                         })
                         .show();

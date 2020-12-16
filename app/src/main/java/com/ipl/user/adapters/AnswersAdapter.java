@@ -20,13 +20,12 @@ public class AnswersAdapter extends RecyclerView.Adapter<AnswersAdapter.MyViewHo
 
     private Context context;
     List<String> answerslist = new ArrayList<>();
-//    private OnItemClick mCallback;
-         OnItemClick mCallback;
+    OnItemClick mCallback;
+
     public AnswersAdapter(Context context, OnItemClick mCallback) {
         this.context=context;
         this.mCallback= mCallback;
     }
-
 
     @NonNull
     @Override
@@ -39,7 +38,6 @@ public class AnswersAdapter extends RecyclerView.Adapter<AnswersAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         holder.answer_name.setText(answerslist.get(position).toString());
-
         holder.answer_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +56,6 @@ public class AnswersAdapter extends RecyclerView.Adapter<AnswersAdapter.MyViewHo
 
     public void updateData(List<String> newModels) {
         if(newModels!=null)
-
         this.answerslist = newModels;
         notifyDataSetChanged();
     }

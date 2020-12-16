@@ -39,10 +39,26 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity android:name=".screens.SignUp" android:screenOrientation="portrait" android:windowSoftInputMode="adjustPan">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http"
+                    android:host="www.iplgame.com" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+
+                <data android:host="www.iplgame.com" />
+
+                <data android:path="/" />
+                <data android:path="/#id_token" />
             </intent-filter>
 
         </activity>

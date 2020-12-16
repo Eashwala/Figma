@@ -1,10 +1,12 @@
 package com.ipl.user;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -30,13 +32,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-       cognito = new MyCognito(getApplicationContext());
+        cognito = new MyCognito(getApplicationContext());
 
         sharedPreferenceManager = SharedPreferenceManager.getInstance(getApplicationContext());
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         fm.beginTransaction().add(R.id.main_container, fragment2, "2").hide(fragment2).commit();
-        fm.beginTransaction().add(R.id.main_container,fragment1, "1").commit();
+        fm.beginTransaction().add(R.id.main_container, fragment1, "1").commit();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -64,7 +66,18 @@ public class MainActivity extends AppCompatActivity {
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
         if (count == 0) {
-            super.onBackPressed();
+            new AlertDialog.Builder(this)
+                    .setTitle("Really Exit?")
+                    .setMessage("Are you sure you want to exit?")
+                    .setNegativeButton(android.R.string.no, null)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            // MainActivity.super.onBackPressed();
+                            finish();
+                            moveTaskToBack(true);
+                        }
+                    }).create().show();
         } else {
             getSupportFragmentManager().popBackStack();
         }

@@ -235,7 +235,7 @@ public class HomeFragment extends Fragment implements OnItemClick {
     @Override
     public void onResume() {
         super.onResume();
-        if(sharedPreferenceManager.getGameId()!=null && !sharedPreferenceManager.getGameId().isEmpty()){
+        if(sharedPreferenceManager.getGameId()!=null && !sharedPreferenceManager.getGameId().isEmpty() && sharedPreferenceManager.getUserId()!=null && !sharedPreferenceManager.getUserId().isEmpty()){
           getUserRanking();
         }
 
@@ -305,7 +305,9 @@ public class HomeFragment extends Fragment implements OnItemClick {
                 }else if(msgType.equalsIgnoreCase("stopGame")){
                     Log.e(TAG, "run: stop gameeeeeeeee   ");
                     pointfromapi=0;
-                    getUserRanking();
+                    if(sharedPreferenceManager.getGameId()!=null && !sharedPreferenceManager.getGameId().isEmpty() && sharedPreferenceManager.getUserId()!=null && !sharedPreferenceManager.getUserId().isEmpty()){
+                        getUserRanking();
+                    }
                     guesstheoutcomelayout.setVisibility(View.GONE);
                     analysingresults.setVisibility(View.GONE);
                     preparingresults.setVisibility(View.GONE);

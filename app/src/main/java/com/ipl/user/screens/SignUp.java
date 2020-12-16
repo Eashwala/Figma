@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -24,13 +25,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.ChallengeContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.VerificationHandler;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -49,6 +53,9 @@ import com.ipl.user.commonutils.SharedPreferenceManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Spinner countries_spinner;
@@ -76,6 +83,21 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
         sharedPreferenceManager = SharedPreferenceManager.getInstance(getApplicationContext());
         myCognito = new MyCognito(getApplicationContext());
 
+        Uri data = getIntent().getData();
+        if(data!=null) {
+            String url = String.valueOf(data);
+
+            String string = url.replace("#", "?");
+            String access_token = Uri.parse(string).getQueryParameter("id_token");
+            String expires = Uri.parse(string).getQueryParameter("expires_in");
+            String code = Uri.parse(string).getQueryParameter("code");
+            String token_type = Uri.parse(string).getQueryParameter("token_type");
+//            sharedPreferenceManager.setUserLoggedIn(true);
+//            sharedPreferenceManager.setUserId(code);
+
+            getDetailsFromFb();
+        }
+
         if(sharedPreferenceManager.getUserLoggedIn()){
             Intent i = new Intent(SignUp.this, MainActivity.class);
             startActivity(i);
@@ -83,7 +105,25 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
         }else{
             initdata();
         }
+    }
 
+    private void getDetailsFromFb() {
+        GetDetailsHandler detailsHandler = new GetDetailsHandler() {
+            @Override
+            public void onSuccess(CognitoUserDetails cognitoUserDetails) {
+                CognitoUserAttributes cognitoUserAttributes=cognitoUserDetails.getAttributes();
+               Map<String, String> stringStringHashMap=new HashMap<>();
+                stringStringHashMap =cognitoUserAttributes.getAttributes();
+
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+
+            }
+        };
+
+            myCognito.detailsfromFacebook(detailsHandler);//
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -117,6 +157,12 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
             @Override
             public void onClick(View view) {
                 // loginButton.performClick();
+                String url = "https://iplgame.auth.us-east-1.amazoncognito.com/oauth2/authorize?redirect_uri=https://www.iplgame.com&response_type=token&client_id=6bhgtj25atbh6ffjbvqtt47n55&identity_provider=Facebook";
+                String workingurl = "https://iplgame.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=6bhgtj25atbh6ffjbvqtt47n55&redirect_uri=https://www.iplgame.com";
+
+                Uri uu = Uri.parse(workingurl);
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, uu);
+                startActivity(browserIntent);
             }
         });
         signuphere.setOnClickListener(new View.OnClickListener() {
