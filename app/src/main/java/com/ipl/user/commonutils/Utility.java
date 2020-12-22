@@ -12,7 +12,7 @@ import com.ipl.user.R;
 
 public class Utility {
     public static void printLog(String logstring) {
-        Log.e("Utility", "printLog: " + logstring);
+        Log.e("Utility", logstring);
     }
 
     public static void showToast(Context applicationContext, String string) {

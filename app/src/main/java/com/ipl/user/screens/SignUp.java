@@ -25,16 +25,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoDevice;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserAttributes;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserCodeDeliveryDetails;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.CognitoUserSession;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.AuthenticationDetails;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.ChallengeContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.continuations.MultiFactorAuthenticationContinuation;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.AuthenticationHandler;
-import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.VerificationHandler;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -48,14 +45,19 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.ipl.user.MainActivity;
 import com.ipl.user.R;
+import com.ipl.user.apiutils.APIInterface;
+import com.ipl.user.apiutils.CognitoClient;
 import com.ipl.user.commonutils.MyCognito;
 import com.ipl.user.commonutils.SharedPreferenceManager;
+import com.ipl.user.commonutils.Utility;
+import com.ipl.user.model.SocialLoginResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Spinner countries_spinner;
@@ -64,10 +66,9 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
     LoginButton loginButton;
     CallbackManager callbackManager;
     private static final int RC_GMAIL_SIGN_IN = 1;
-    private static final int RC_FB_SIGN_IN = 102;
+    APIInterface service;
     SharedPreferenceManager sharedPreferenceManager;
     MyCognito myCognito;
-    String userid;
     ProgressBar signupprogbar;
     CognitoUserSession cognitoUserSession;
     boolean isPasswordVisible;
@@ -81,24 +82,43 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
         setContentView(R.layout.activity_sign_up);
 
         sharedPreferenceManager = SharedPreferenceManager.getInstance(getApplicationContext());
+        service = CognitoClient.getCognitoClientInstance().create(APIInterface.class);
         myCognito = new MyCognito(getApplicationContext());
 
         Uri data = getIntent().getData();
         if(data!=null) {
             String url = String.valueOf(data);
 
-            String string = url.replace("#", "?");
-            String access_token = Uri.parse(string).getQueryParameter("id_token");
-            String expires = Uri.parse(string).getQueryParameter("expires_in");
-            String code = Uri.parse(string).getQueryParameter("code");
-            String token_type = Uri.parse(string).getQueryParameter("token_type");
-//            sharedPreferenceManager.setUserLoggedIn(true);
-//            sharedPreferenceManager.setUserId(code);
+            if(url.contains("logout")){
+                Toast.makeText(getApplicationContext(), "Loggedout Successfully",Toast.LENGTH_LONG).show();
+                sharedPreferenceManager.setUserId("");
+                sharedPreferenceManager.clearAllPreferences();
+                myCognito.userLogout();
+                Intent intent = new Intent(this, SignUp.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                return;
 
-            getDetailsFromFb();
+            }else{
+                String string = url.replace("#", "?");
+                String id_token = Uri.parse(string).getQueryParameter("id_token");
+                String access_token = Uri.parse(string).getQueryParameter("access_token");
+
+                String expires = Uri.parse(string).getQueryParameter("expires_in");
+                String code = Uri.parse(string).getQueryParameter("code");
+                String token_type = Uri.parse(string).getQueryParameter("token_type");
+                Utility.printLog("onCreate: accessstoken "+access_token);
+                Utility.printLog("onCreate: id_token "+id_token);
+
+                if(access_token!=null & !access_token.isEmpty()){
+                    getUserIdFromToken(access_token);
+                }
+            }
         }
 
-        if(sharedPreferenceManager.getUserLoggedIn()){
+        if(sharedPreferenceManager.getUserLoggedIn() && sharedPreferenceManager.getUserId()!=null){
             Intent i = new Intent(SignUp.this, MainActivity.class);
             startActivity(i);
             finish();
@@ -107,23 +127,37 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
         }
     }
 
-    private void getDetailsFromFb() {
-        GetDetailsHandler detailsHandler = new GetDetailsHandler() {
-            @Override
-            public void onSuccess(CognitoUserDetails cognitoUserDetails) {
-                CognitoUserAttributes cognitoUserAttributes=cognitoUserDetails.getAttributes();
-               Map<String, String> stringStringHashMap=new HashMap<>();
-                stringStringHashMap =cognitoUserAttributes.getAttributes();
+    private void getUserIdFromToken(String access_token) {
 
+        Call<SocialLoginResponse> call = service.getUserIdFromToken("Bearer "+access_token);
+        call.enqueue(new Callback<SocialLoginResponse>() {
+            @Override
+            public void onResponse(Call<SocialLoginResponse> call, Response<SocialLoginResponse> response) {
+
+                if (response!=null && response.isSuccessful()){
+                    SocialLoginResponse socialLoginResponse = response.body();
+                    if(socialLoginResponse.getUsername()!=null){
+                        sharedPreferenceManager.setUserId(socialLoginResponse.getUsername());
+                        sharedPreferenceManager.setUserLoggedIn(true);
+                        Intent i = new Intent(SignUp.this, MainActivity.class);
+                        startActivity(i);
+                        finish();
+                    }else{
+                        Toast.makeText(getApplicationContext(), socialLoginResponse.getErrorDescription(),Toast.LENGTH_LONG).show();
+                        sharedPreferenceManager.setUserId("");
+                        sharedPreferenceManager.setUserLoggedIn(false);
+                    }
+
+                }else{
+
+                }
             }
 
             @Override
-            public void onFailure(Exception exception) {
+            public void onFailure(Call<SocialLoginResponse> call, Throwable t) {
 
             }
-        };
-
-            myCognito.detailsfromFacebook(detailsHandler);//
+        });
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -159,7 +193,6 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
                 // loginButton.performClick();
                 String url = "https://iplgame.auth.us-east-1.amazoncognito.com/oauth2/authorize?redirect_uri=https://www.iplgame.com&response_type=token&client_id=6bhgtj25atbh6ffjbvqtt47n55&identity_provider=Facebook";
                 String workingurl = "https://iplgame.auth.us-east-1.amazoncognito.com/login?response_type=token&client_id=6bhgtj25atbh6ffjbvqtt47n55&redirect_uri=https://www.iplgame.com";
-
                 Uri uu = Uri.parse(workingurl);
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, uu);
                 startActivity(browserIntent);
@@ -180,15 +213,11 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
                     if (event.getRawX() >= (passwordlogin.getRight() - passwordlogin.getCompoundDrawables()[RIGHT].getBounds().width())) {
                         int selection = passwordlogin.getSelectionEnd();
                         if (isPasswordVisible) {
-                            // set drawable image
                             passwordlogin.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_baseline_visibility_off_24, 0);
-                            // hide Password
                             passwordlogin.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                             isPasswordVisible = false;
                         } else  {
-                            // set drawable image
                             passwordlogin.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_baseline_visibility_24, 0);
-                            // show Password
                             passwordlogin.setTransformationMethod(PasswordTransformationMethod.getInstance());
                             isPasswordVisible = true;
                         }
@@ -253,9 +282,7 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
 
                     switch (((AmazonServiceException) e).getErrorCode()){
                         case "UserNotConfirmedException":
-
                             AlertDialog alertDialog = new AlertDialog.Builder(SignUp.this,  R.style.AlertDialogStyle)
-                                    //.setIcon(android.R.drawable.ic_dialog_alert)
                                     .setTitle("Confirm User!!")
                                     .setMessage("OTP will be sent to email id")
                                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -268,10 +295,8 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
                                                     ii.putExtra("userId",emaillogin.getText().toString());
                                                     startActivity(ii);
                                                 }
-
                                                 @Override
                                                 public void onFailure(Exception exception) {
-
                                                 }
                                             };
                                             myCognito.resendOtp(emaillogin.getText().toString().trim(), vh);
@@ -294,8 +319,7 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
                 }
             }
         };
-        myCognito.userLogin(emaillogin.getText().toString().trim(),passwordlogin.getText().toString().trim(), authenticationHandler, cognitoUserSession);//mobilenumber.getText().toString(), mobilenumberpassword.getText().toString());
-
+        myCognito.userLogin(emaillogin.getText().toString().trim(),passwordlogin.getText().toString().trim(), authenticationHandler, cognitoUserSession);
     }
 
     private boolean validate() {
@@ -470,7 +494,6 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
 //           // socialLoginUpdate(account.getDisplayName(), account.getEmail(), "Gmail", "");
 //        }
 //    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

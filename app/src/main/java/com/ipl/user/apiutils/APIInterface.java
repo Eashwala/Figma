@@ -3,11 +3,17 @@ package com.ipl.user.apiutils;
 import com.ipl.user.model.BlankResponse;
 import com.ipl.user.model.GameDetail;
 import com.ipl.user.model.GamesList;
+import com.ipl.user.model.SocialLoginResponse;
 import com.ipl.user.model.SubmitAnswerToQuestion;
 import com.ipl.user.model.UserRanking;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -43,4 +49,6 @@ public interface APIInterface {
   @GET("listgamesforuser")
   Call<GamesList> listgamesforuser(@Query("userId")  String userId);
 
+  @GET("oauth2/userInfo")
+    Call<SocialLoginResponse> getUserIdFromToken(@Header("Authorization") String token);
 }

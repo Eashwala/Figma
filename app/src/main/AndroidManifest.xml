@@ -59,6 +59,7 @@
 
                 <data android:path="/" />
                 <data android:path="/#id_token" />
+                <data android:path="/logout" />
             </intent-filter>
 
         </activity>

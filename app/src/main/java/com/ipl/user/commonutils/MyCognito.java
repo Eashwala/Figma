@@ -12,7 +12,10 @@ import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GenericHa
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.GetDetailsHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.SignUpHandler;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.handlers.VerificationHandler;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.tokens.CognitoAccessToken;
 import com.amazonaws.regions.Regions;
+import com.amazonaws.services.cognitoidentity.AmazonCognitoIdentity;
+import com.amazonaws.services.cognitoidentity.model.CognitoIdentityProvider;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -131,7 +134,12 @@ public class MyCognito {
 
     }
 
-    public void detailsfromFacebook(GetDetailsHandler detailsHandler) {
-      //  userPool.getUser(username).getDetailsInBackground(detailsHandler);
+    public void detailsfromFacebook(String token) {
+        CognitoAccessToken ss = new CognitoAccessToken(token);
+        try {
+            String name=  ss.getUsername();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

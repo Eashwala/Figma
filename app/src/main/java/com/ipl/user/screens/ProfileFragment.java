@@ -3,6 +3,7 @@ package com.ipl.user.screens;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.ipl.user.apiutils.APIInterface;
 import com.ipl.user.apiutils.ApiClient;
 import com.ipl.user.commonutils.MyCognito;
 import com.ipl.user.commonutils.SharedPreferenceManager;
+import com.ipl.user.commonutils.Utility;
 import com.ipl.user.model.Game;
 import com.ipl.user.model.GamesList;
 import com.ipl.user.model.Ranking;
@@ -61,6 +63,24 @@ public class ProfileFragment extends Fragment {
         prof_settings = view.findViewById(R.id.prof_settings);
         logout = view.findViewById(R.id.logout);
         profile_games_recyc = view.findViewById(R.id.profile_games_recyc);
+
+        Uri data = getActivity().getIntent().getData();
+        if(data!=null) {
+            String url = String.valueOf(data);
+
+            String string = url.replace("#", "?");
+            String id_token = Uri.parse(string).getQueryParameter("id_token");
+            String access_token = Uri.parse(string).getQueryParameter("access_token");
+
+            String expires = Uri.parse(string).getQueryParameter("expires_in");
+            String code = Uri.parse(string).getQueryParameter("code");
+            String token_type = Uri.parse(string).getQueryParameter("token_type");
+            sharedPreferenceManager.setUserLoggedIn(true);
+//            sharedPreferenceManager.setUserId(code);
+            Utility.printLog("onCreate: accessstoken "+url);
+
+
+        }
         onclicks();
         return view;
 
@@ -77,7 +97,7 @@ public class ProfileFragment extends Fragment {
 
                         if(gamesList.getGames().get(i) !=null && gamesList.getGames().get(i).getPoints()!=null)
                             Log.e("TAG", "listGamesForUser: "+gamesList.getGames().get(i).getPoints() );
-                           pointsscoredbuser = pointsscoredbuser+ gamesList.getGames().get(i).getPoints();
+                        pointsscoredbuser = pointsscoredbuser+ gamesList.getGames().get(i).getPoints();
                     }
                     gamesplayedbyuser = gamesList.getGames().size();
                     sendDataTodapter(gamesList.getGames(), sharedPreferenceManager);
@@ -107,20 +127,19 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 AlertDialog alertDialog = new AlertDialog.Builder(getActivity(),  R.style.AlertDialogStyle)
                         //.setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Sigout User")
+                        .setTitle("Signout User")
                         .setMessage("Logout from this device ?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
-                                cognito.userLogout();
-                                sharedPreferenceManager.clearAllPreferences();
-                                Intent intent = new Intent(getActivity(), SignUp.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
+                                String workingurl = "https://iplgame.auth.us-east-1.amazoncognito.com/logout?client_id=6bhgtj25atbh6ffjbvqtt47n55&redirect_uri=https://www.iplgame.com/logout?status=success";
+                                String urlll = "https://iplgame.auth.us-east-1.amazoncognito.com/logout?client_id=6bhgtj25atbh6ffjbvqtt47n55&logout_uri=https://www.iplgame.com/logout";
 
+                                Uri uu = Uri.parse(urlll);
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, uu);
+                                startActivity(browserIntent);
+                                getActivity().finish();
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
